@@ -1,0 +1,67 @@
+plugins {
+    id 'eclipse'
+    id 'net.neoforged.moddev.legacyforge' version '2.0.115'
+}
+
+version = '1.0'
+base.archivesName = "underground_biomes_forged"
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+legacyForge {
+    version = "1.20.1-47.4.10"
+
+    runs {
+        client {
+            client()
+        }
+        server {
+            server()
+        }
+
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.DEBUG
+
+            // Hier wurden beide Zeilen von 'property' auf 'systemProperty' geändert:
+            systemProperty 'mixin.env.remapRefMap', 'true'
+            systemProperty 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+        }
+    }
+
+    mods {
+        underground_biomes_forged {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+mixin {
+    add sourceSets.main, "underground_biomes_forged.refmap.json"
+    config "underground_biomes_forged.mixins.json"
+}
+
+dependencies {
+    implementation "org.spongepowered:mixin:0.8.5"
+    implementation(jarJar("io.github.llamalad7:mixinextras-neoforge:0.5.0"))
+
+    annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
+    annotationProcessor "io.github.llamalad7:mixinextras-common:0.5.0"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+jar {
+    manifest.attributes([
+            "Specification-Title"     : "Underground Biomes Forged",
+            "Specification-Vendor"    : "Erythrocraft",
+            "Specification-Version"   : "1",
+            "Implementation-Title"    : project.name,
+            "Implementation-Version"  : project.version,
+            "Implementation-Vendor"   : "Erythrocraft",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "MixinConfigs"            : "underground_biomes_forged.mixins.json"
+    ])
+}

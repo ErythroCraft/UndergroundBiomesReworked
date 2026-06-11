@@ -1,0 +1,28 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT License"
+
+[[mods]]
+modId="underground_biomes_forged"
+version="1.0.0"
+displayName="Underground Biomes Forged"
+displayURL="https://www.curseforge.com/members/hinterix/projects"
+credits=""
+authors="Hinterix"
+description="Reforged the original mod Underground Biomes"
+
+# Start of user code block mod configuration
+# End of user code block mod configuration
+
+[[dependencies.underground_biomes_forged]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1]"
+    ordering="AFTER"
+    side="BOTH"
+
+
+
+
+# Start of user code block dependencies configuration
+# End of user code block dependencies configuration

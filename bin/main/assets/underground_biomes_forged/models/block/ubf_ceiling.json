@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "underground_biomes_forged:block/ubf_ceiling",
+    "up": "underground_biomes_forged:block/ubf_ceiling",
+    "north": "underground_biomes_forged:block/ubf_ceiling",
+    "east": "underground_biomes_forged:block/ubf_ceiling",
+    "south": "underground_biomes_forged:block/ubf_ceiling",
+    "west": "underground_biomes_forged:block/ubf_ceiling",
+    "particle": "underground_biomes_forged:block/ubf_ceiling"
+  },
+  "render_type": "cutout"
+}

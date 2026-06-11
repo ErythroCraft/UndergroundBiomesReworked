@@ -1,0 +1,9 @@
+{
+    "replace": false,
+    "values": 
+    [
+        "underground_biomes_forged:underground_top",
+        "underground_biomes_forged:underground_side",
+        "underground_biomes_forged:underground_down"
+    ]
+}
