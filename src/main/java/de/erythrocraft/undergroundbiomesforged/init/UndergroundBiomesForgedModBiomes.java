@@ -97,17 +97,14 @@ public class UndergroundBiomesForgedModBiomes {
 
 			for (LevelStem levelStem : levelStemTypeRegistry.stream().toList()) {
 				Holder<DimensionType> dimensionType = levelStem.type();
-				ChunkGenerator chunkGenerator = levelStem.generator();
 
-				// --- DYNAMISCHE INJEKTION IN OVERWORLD & NETHER ---
-				if (dimensionType.is(BuiltinDimensionTypes.OVERWORLD)
-						|| dimensionType.is(BuiltinDimensionTypes.NETHER)) {
+				if (dimensionType.is(BuiltinDimensionTypes.OVERWORLD)) {
+					ChunkGenerator chunkGenerator = levelStem.generator();
 
 					if (chunkGenerator.getBiomeSource() instanceof MultiNoiseBiomeSource noiseSource) {
 						List<Pair<Climate.ParameterPoint, Holder<Biome>>> parameters = new ArrayList<>(
 								noiseSource.parameters().values());
 
-						// Wir fügen deine Untergrund-Biome zu den Klima-Parametern hinzu
 						parameters.add(new Pair<>(new Climate.ParameterPoint(
 								Climate.Parameter.span(0f, 2f), Climate.Parameter.span(0f, 2f),
 								Climate.Parameter.span(0f, 2f), Climate.Parameter.span(0f, 2f),
@@ -127,7 +124,6 @@ public class UndergroundBiomesForgedModBiomes {
 								biome -> chunkGenerator.generationSettingsGetter.apply(biome).features(), true));
 					}
 
-					// Übergibt den Dimensionstyp an deine Einstellungsklasse für das Mixin
 					if (chunkGenerator instanceof NoiseBasedChunkGenerator noiseGenerator) {
 						((UndergroundBiomesForgedModNoiseGeneratorSettings) (Object) noiseGenerator.settings.value())
 								.undergroundBiomesForgedDimensionTypeReference(dimensionType);
@@ -137,31 +133,21 @@ public class UndergroundBiomesForgedModBiomes {
 		}
 	}
 
-	/**
-	 * Prüft die Dimension und wendet die entsprechenden Oberflächen-Regeln an.
-	 */
 	public static SurfaceRules.RuleSource adaptSurfaceRule(SurfaceRules.RuleSource currentRuleSource,
 			Holder<DimensionType> dimensionType) {
-		// Regeln greifen nun sowohl in der Oberwelt als auch im Nether!
-		if (dimensionType.is(BuiltinDimensionTypes.OVERWORLD) || dimensionType.is(BuiltinDimensionTypes.NETHER)) {
-			return injectUbfSurfaceRules(currentRuleSource);
+		if (dimensionType.is(BuiltinDimensionTypes.OVERWORLD)) {
+			return injectOverworldSurfaceRules(currentRuleSource);
 		}
 		return currentRuleSource;
 	}
 
-	/**
-	 * Injiziert die UBF-Platzhalterregeln in die bestehende Dimensions-Pipeline.
-	 * Umbenannt von injectOverworldSurfaceRules zu injectUbfSurfaceRules (da
-	 * universell).
-	 */
-	private static SurfaceRules.RuleSource injectUbfSurfaceRules(SurfaceRules.RuleSource currentRuleSource) {
+	private static SurfaceRules.RuleSource injectOverworldSurfaceRules(SurfaceRules.RuleSource currentRuleSource) {
 		List<SurfaceRules.RuleSource> customSurfaceRules = new ArrayList<>();
 
 		BlockState floorState = UndergroundBiomesForgedModBlocks.UBF_FLOOR.get().defaultBlockState();
 		BlockState wallState = UndergroundBiomesForgedModBlocks.UBF_WALL.get().defaultBlockState();
 		BlockState ceilingState = UndergroundBiomesForgedModBlocks.UBF_CEILING.get().defaultBlockState();
 
-		// BIOME_TOP Regeln hinzufügen
 		customSurfaceRules.add(SurfaceRules.ifTrue(
 				SurfaceRules.isBiome(BIOME_TOP),
 				SurfaceRules.sequence(
@@ -171,7 +157,6 @@ public class UndergroundBiomesForgedModBiomes {
 								SurfaceRules.state(floorState)),
 						SurfaceRules.state(wallState))));
 
-		// BIOME_DOWN Regeln hinzufügen
 		customSurfaceRules.add(SurfaceRules.ifTrue(
 				SurfaceRules.isBiome(BIOME_DOWN),
 				SurfaceRules.sequence(
@@ -181,7 +166,6 @@ public class UndergroundBiomesForgedModBiomes {
 								SurfaceRules.state(floorState)),
 						SurfaceRules.state(wallState))));
 
-		// Bestehende Regeln der Dimension hinten anhängen
 		if (currentRuleSource instanceof SurfaceRules.SequenceRuleSource sequenceRuleSource) {
 			customSurfaceRules.addAll(sequenceRuleSource.sequence());
 		} else {
