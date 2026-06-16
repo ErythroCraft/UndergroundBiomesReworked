@@ -15,13 +15,22 @@ public class UbfBiomeConfig {
     }
 
     /**
-     * EBENE 1 & 2: Bestimmt das HAUPT-MATERIAL (Primary) basierend auf der Y-Höhe
-     * und der Art des Platzhalters. Java 17 konform.
+     * Bestimmt das HAUPT-MATERIAL (Primary) basierend auf Dimension und Höhe.
      */
     public static BlockState getPrimaryReplacement(String placeholderType, BlockPos pos) {
         int y = pos.getY();
 
-        // LAYER 2: DEEP LAYER (y < 0)
+        // 1. WEICHE FÜR DEN NETHER
+        if (y >= 0 && y <= 128 && placeholderType.equals(TYPE_WALL) && (pos.getX() + pos.getZ()) % 7 == 0) {
+            return switch (placeholderType) {
+                case TYPE_FLOOR -> Blocks.NETHERRACK.defaultBlockState();
+                case TYPE_CEILING -> Blocks.BASALT.defaultBlockState();
+                case TYPE_WALL -> Blocks.BLACKSTONE.defaultBlockState();
+                default -> Blocks.NETHERRACK.defaultBlockState();
+            };
+        }
+
+        // 2. OBERWELT: LAYER 2 - DEEP LAYER (y < 0)
         if (y < 0) {
             return switch (placeholderType) {
                 case TYPE_FLOOR -> Blocks.CALCITE.defaultBlockState();
@@ -31,7 +40,7 @@ public class UbfBiomeConfig {
             };
         }
 
-        // LAYER 1: UPPER LAYER (y >= 0)
+        // 3. OBERWELT: LAYER 1 - UPPER LAYER (y >= 0)
         else {
             return switch (placeholderType) {
                 case TYPE_FLOOR -> Blocks.MOSS_BLOCK.defaultBlockState();
@@ -43,27 +52,73 @@ public class UbfBiomeConfig {
     }
 
     /**
-     * EBENE 1 & 2: Bestimmt das SEKUNDÄR-MATERIAL für das Rausch-Blending.
+     * Bestimmt das SEKUNDÄR-MATERIAL mit organischen Block-Mischungen.
      */
     public static BlockState getSecondaryReplacement(String placeholderType, BlockPos pos) {
         int y = pos.getY();
 
-        // Blending für den Deep Layer (y < 0)
+        long posHash = pos.asLong();
+        java.util.Random rand = new java.util.Random(posHash);
+        double chance = rand.nextDouble();
+
+        // 1. NETHER BLENDING
+        if (y >= 0 && y <= 128 && (pos.getX() * pos.getZ()) % 5 == 0) {
+            return switch (placeholderType) {
+                case TYPE_FLOOR -> chance < 0.70 ? Blocks.SOUL_SOIL.defaultBlockState()
+                        : Blocks.SOUL_SAND.defaultBlockState();
+                case TYPE_CEILING -> chance < 0.80 ? Blocks.SMOOTH_BASALT.defaultBlockState()
+                        : Blocks.GLOWSTONE.defaultBlockState();
+                case TYPE_WALL -> {
+                    // KORREKTUR: "yield" statt "return" innerhalb der Switch-Expression!
+                    if (chance < 0.60)
+                        yield Blocks.GILDED_BLACKSTONE.defaultBlockState();
+                    else if (chance < 0.90)
+                        yield Blocks.MAGMA_BLOCK.defaultBlockState();
+                    else
+                        yield Blocks.CRYING_OBSIDIAN.defaultBlockState();
+                }
+                default -> Blocks.NETHERRACK.defaultBlockState();
+            };
+        }
+
+        // 2. OBERWELT: DEEP LAYER (y < 0)
         if (y < 0) {
             return switch (placeholderType) {
-                case TYPE_FLOOR -> Blocks.AMETHYST_BLOCK.defaultBlockState();
-                case TYPE_CEILING -> Blocks.SMOOTH_BASALT.defaultBlockState();
-                case TYPE_WALL -> Blocks.TUFF.defaultBlockState();
+                case TYPE_FLOOR -> chance < 0.70 ? Blocks.AMETHYST_BLOCK.defaultBlockState()
+                        : Blocks.BUDDING_AMETHYST.defaultBlockState();
+                case TYPE_CEILING -> chance < 0.80 ? Blocks.SMOOTH_BASALT.defaultBlockState()
+                        : Blocks.BASALT.defaultBlockState();
+                case TYPE_WALL -> {
+                    // KORREKTUR: "yield" statt "return" innerhalb der Switch-Expression!
+                    if (chance < 0.60)
+                        yield Blocks.TUFF.defaultBlockState();
+                    else if (chance < 0.90)
+                        yield Blocks.DEEPSLATE.defaultBlockState();
+                    else
+                        yield Blocks.CALCITE.defaultBlockState();
+                }
                 default -> Blocks.TUFF.defaultBlockState();
             };
         }
 
-        // Blending für den Upper Layer (y >= 0)
+        // 3. OBERWELT: UPPER LAYER (y >= 0)
         else {
             return switch (placeholderType) {
-                case TYPE_FLOOR -> Blocks.MUD.defaultBlockState();
-                case TYPE_CEILING -> Blocks.POINTED_DRIPSTONE.defaultBlockState();
-                case TYPE_WALL -> Blocks.ANDESITE.defaultBlockState();
+                case TYPE_FLOOR -> chance < 0.80 ? Blocks.MUD.defaultBlockState()
+                        : Blocks.MUDDY_MANGROVE_ROOTS.defaultBlockState();
+                case TYPE_CEILING -> chance < 0.70 ? Blocks.POINTED_DRIPSTONE.defaultBlockState()
+                        : Blocks.DRIPSTONE_BLOCK.defaultBlockState();
+                case TYPE_WALL -> {
+                    // KORREKTUR: "yield" statt "return" innerhalb der Switch-Expression!
+                    if (chance < 0.65)
+                        yield Blocks.ANDESITE.defaultBlockState();
+                    else if (chance < 0.85)
+                        yield Blocks.STONE.defaultBlockState();
+                    else if (chance < 0.95)
+                        yield Blocks.DIORITE.defaultBlockState();
+                    else
+                        yield Blocks.GRAVEL.defaultBlockState();
+                }
                 default -> Blocks.ANDESITE.defaultBlockState();
             };
         }
@@ -74,9 +129,9 @@ public class UbfBiomeConfig {
      */
     public static double getBlendThreshold(String placeholderType) {
         return switch (placeholderType) {
-            case TYPE_FLOOR -> 0.35; // Häufiger Wechsel für organische Böden
-            case TYPE_WALL -> 0.45; // Größere Gesteinsadern an den Wänden
-            case TYPE_CEILING -> 0.25; // Gezielte Akzente an den Decken
+            case TYPE_FLOOR -> 0.35;
+            case TYPE_WALL -> 0.45;
+            case TYPE_CEILING -> 0.25;
             default -> 0.50;
         };
     }

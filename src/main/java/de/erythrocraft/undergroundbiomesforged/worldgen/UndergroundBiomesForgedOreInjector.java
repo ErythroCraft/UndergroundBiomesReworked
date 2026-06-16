@@ -27,8 +27,12 @@ public class UndergroundBiomesForgedOreInjector {
         int minX = chunk.getPos().getMinBlockX();
         int minZ = chunk.getPos().getMinBlockZ();
 
-        int minY = -64;
-        int maxY = 60;
+        // --- DYNAMISCHE HÖHENANPASSUNG FÜR NETHER & OBERWELT ---
+        // Wenn die Mindesthöhe unter 0 liegt, sind wir in der Oberwelt.
+        boolean isDeepWorld = chunk.getMinBuildHeight() < 0;
+
+        int minY = isDeepWorld ? -64 : 0;
+        int maxY = isDeepWorld ? 60 : 127; // Im Nether lösen wir die Blöcke bis Y=127 auf
 
         Block ubfFloor = UndergroundBiomesForgedModBlocks.UBF_FLOOR.get();
         Block ubfWall = UndergroundBiomesForgedModBlocks.UBF_WALL.get();

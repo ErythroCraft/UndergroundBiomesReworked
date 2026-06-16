@@ -36,29 +36,20 @@ public class UndergroundBiomesForgedMaterialResolver {
             type = UbfBiomeConfig.TYPE_CEILING;
         }
 
-        // --- DYNAMISCHE HÖHLEN GENERIERUNG (OVERWORLD & NETHER) ---
-        // --- UNIVERSELLE HÖHLEN GENERIERUNG (ALLE DIMENSIONEN) ---
         if (currentBlock == ubfWall) {
             long posHash = pos.asLong();
             java.util.Random rand = new java.util.Random(posHash);
 
             if (rand.nextDouble() < 0.0005) {
                 final BlockPos spawnPos = pos.immutable();
-
-                // DER TRICK: Wir holen uns den exakten Registrierungs-Schlüssel der aktuellen
-                // Welt!
-                // Egal ob Vanilla (Overworld, Nether, End) oder Mod-Dimensionen (z.B. Twilight
-                // Forest)
                 final ResourceKey<Level> currentDimension = chunk instanceof net.minecraft.world.level.chunk.LevelChunk levelChunk
                         ? levelChunk.getLevel().dimension()
-                        : Level.OVERWORLD; // Sicherheits-Fallback
+                        : Level.OVERWORLD;
 
                 UndergroundBiomesForgedMod.queueServerWork(1, () -> {
                     ServerLevel serverLevel = ServerLifecycleHooks.getCurrentServer().getLevel(currentDimension);
 
                     if (serverLevel != null) {
-                        // Sicherheits-Check für die Nether-Höhen (gilt nur, wenn wir auch wirklich im
-                        // Nether sind)
                         if (currentDimension == Level.NETHER && (spawnPos.getY() < 10 || spawnPos.getY() > 115)) {
                             return;
                         }
@@ -82,8 +73,6 @@ public class UndergroundBiomesForgedMaterialResolver {
                 });
             }
         }
-
-        // --- ENDE DER ERWEITERUNG ---
 
         BlockState primary = UbfBiomeConfig.getPrimaryReplacement(type, pos);
         BlockState secondary = UbfBiomeConfig.getSecondaryReplacement(type, pos);
