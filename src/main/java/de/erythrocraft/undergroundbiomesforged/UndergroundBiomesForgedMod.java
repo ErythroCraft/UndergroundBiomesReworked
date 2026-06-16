@@ -30,6 +30,7 @@ import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
+import de.erythrocraft.undergroundbiomesforged.init.ModStructurePieces; // Neuer Import
 
 @Mod("underground_biomes_forged")
 @Mod.EventBusSubscriber(modid = UndergroundBiomesForgedMod.MODID)
@@ -45,6 +46,8 @@ public class UndergroundBiomesForgedMod {
 
 		UndergroundBiomesForgedModBlocks.REGISTRY.register(bus);
 		UndergroundBiomesForgedModItems.REGISTRY.register(bus);
+
+		ModStructurePieces.REGISTRY.register(bus);
 	}
 
 	public static BlockState classifySurfaceType(Direction normal) {
