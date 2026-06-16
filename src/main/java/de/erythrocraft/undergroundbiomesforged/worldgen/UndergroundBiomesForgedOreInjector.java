@@ -44,20 +44,11 @@ public class UndergroundBiomesForgedOreInjector {
                     BlockState currentState = chunk.getBlockState(pos);
                     Block currentBlock = currentState.getBlock();
 
-                    // Performance-Check: Nur verarbeiten, wenn es ein UBF-Platzhalter ist
                     if (currentBlock == ubfFloor || currentBlock == ubfWall || currentBlock == ubfCeiling) {
-
-                        // Generiere ein lokales 3D-Rauschen für das Material-Blending an dieser
-                        // Position
                         double blendNoise = UndergroundBiomesForgedNoiseGenerator.sampleTunnelDensity(worldX + 500,
                                 worldY * 2, worldZ - 300);
-
-                        // Schicke den Platzhalter durch die Transformations-Maschine
                         BlockState resolvedState = UndergroundBiomesForgedMaterialResolver
-                                .resolvePlaceholder(currentState, pos, blendNoise);
-
-                        // Schreibe den echten Block (z.B. Amethyst, Moos, Stone oder Deepslate) in den
-                        // Chunk
+                                .resolvePlaceholder(chunk, currentState, pos, blendNoise);
                         chunk.setBlockState(pos, resolvedState, false);
                     }
                 }

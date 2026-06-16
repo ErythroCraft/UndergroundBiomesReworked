@@ -1,20 +1,17 @@
 package de.erythrocraft.undergroundbiomesforged;
 
+import de.erythrocraft.undergroundbiomesforged.init.ModStructurePieces;
+import de.erythrocraft.undergroundbiomesforged.init.UndergroundBiomesForgedModBlocks;
+import de.erythrocraft.undergroundbiomesforged.init.UndergroundBiomesForgedModItems;
+import de.erythrocraft.undergroundbiomesforged.worldgen.UbfBiomeConfig;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import de.erythrocraft.undergroundbiomesforged.init.UndergroundBiomesForgedModBlocks;
-import de.erythrocraft.undergroundbiomesforged.init.UndergroundBiomesForgedModItems;
-import de.erythrocraft.undergroundbiomesforged.worldgen.UbfBiomeConfig;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
@@ -30,7 +27,8 @@ import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
-import de.erythrocraft.undergroundbiomesforged.init.ModStructurePieces; // Neuer Import
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 @Mod("underground_biomes_forged")
 @Mod.EventBusSubscriber(modid = UndergroundBiomesForgedMod.MODID)
