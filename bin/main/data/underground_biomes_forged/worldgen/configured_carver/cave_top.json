@@ -9,11 +9,11 @@
             "type": "minecraft:uniform",
             "min_inclusive": 
             {
-                "absolute": 0
+                "absolute": 64
             },
             "max_inclusive": 
             {
-                "absolute": 60
+                "absolute": 128
             }
         },
         "vertical_radius_multiplier": 

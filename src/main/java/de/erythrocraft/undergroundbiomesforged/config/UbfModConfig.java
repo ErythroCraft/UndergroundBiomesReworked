@@ -3,6 +3,10 @@ package de.erythrocraft.undergroundbiomesforged.config;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class UbfModConfig {
+        private UbfModConfig() {
+                /* This utility class should not be instantiated */
+        }
+
         public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
         public static final ForgeConfigSpec SPEC;
 
@@ -43,6 +47,8 @@ public class UbfModConfig {
                                 .defineInRange("netherOreMultiplier", 1.0, 0.0, 10.0);
                 BUILDER.pop();
 
+                // KORREKTUR: Nur noch EIN pop(), um die "general"-Kategorie sauber zu
+                // schließen!
                 BUILDER.pop();
                 SPEC = BUILDER.build();
         }
