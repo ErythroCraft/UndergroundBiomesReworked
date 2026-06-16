@@ -19,7 +19,8 @@ public class UbfBiomeConfig {
      * Ermittelt das großflächige Untergrund-Biom.
      */
     public static int getUndergroundBiomeId(BlockPos pos) {
-        // Holt die vom Spieler eingestellte Biomgröße (Standard: 300.0)
+        // Zuerst lokal sichern, damit Java nicht pro Block in die Config-Datei greifen
+        // muss!
         double size = de.erythrocraft.undergroundbiomesforged.config.UbfModConfig.BIOME_SIZE.get();
 
         int noiseX = (int) Math.floor(pos.getX() / size);
@@ -147,10 +148,10 @@ public class UbfBiomeConfig {
 
     public static double getBlendThreshold(String placeholderType) {
         return switch (placeholderType) {
-            case TYPE_FLOOR -> 0.35;
-            case TYPE_WALL -> 0.45;
-            case TYPE_CEILING -> 0.25;
-            default -> 0.50;
+            case TYPE_FLOOR -> 1.00;
+            case TYPE_WALL -> 1.00;
+            case TYPE_CEILING -> 1.00;
+            default -> 1.00;
         };
     }
 }

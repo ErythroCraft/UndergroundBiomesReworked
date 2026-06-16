@@ -1,16 +1,15 @@
 package de.erythrocraft.undergroundbiomesforged.worldgen;
 
+import de.erythrocraft.undergroundbiomesforged.config.UbfModConfig;
+import de.erythrocraft.undergroundbiomesforged.init.UndergroundBiomesForgedModBlocks;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.server.ServerLifecycleHooks;
-import de.erythrocraft.undergroundbiomesforged.init.UndergroundBiomesForgedModBlocks;
-import de.erythrocraft.undergroundbiomesforged.UndergroundBiomesForgedMod;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.LevelChunkSection;
+import net.minecraft.world.level.levelgen.structure.BoundingBox; // Import der Config
 
 @SuppressWarnings("null")
 public class UndergroundBiomesForgedOreInjector {
@@ -19,145 +18,154 @@ public class UndergroundBiomesForgedOreInjector {
         throw new UnsupportedOperationException("Dies ist eine Utility-Klasse.");
     }
 
-    /**
-     * Führt die Ersetzung der Platzhalter-Blöcke durch echte Gesteine und Erze aus.
-     * Scanniert jetzt die VOLLE Bauhöhe des Chunks, um unzerstörbare Reste zu
-     * verhindern.
-     */
     public static void resolveAndInjectChunk(ChunkAccess chunk) {
-        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
         int minX = chunk.getPos().getMinBlockX();
         int minZ = chunk.getPos().getMinBlockZ();
 
-        // --- KORREKTUR: SCANNEN DER VOLLE BAUHÖHE ---
-        // Anstatt starr bei Y=60 aufzuhören, fragen wir den Chunk nach seiner echten
-        // Deckenhöhe!
-        // In der Oberwelt scannt er nun von -64 bis weit über 60+ (je nach Berg-Biom).
         boolean isDeepWorld = chunk.getMinBuildHeight() < 0;
         int minY = chunk.getMinBuildHeight();
-        int maxY = chunk.getMaxBuildHeight();
+        int maxY = isDeepWorld ? 64 : 127;
+
+        // ==========================================
+        // PERFORMANCE-RETTUNG: CONFIG-WERTE CACHEN!
+        // Wir lesen die Config nur EINMAL pro Chunk aus, statt Millionen Mal!
+        // ==========================================
+        double neanderthalChance = UbfModConfig.NEANDERTHAL_CAVE_CHANCE.get();
+        int neanderthalRadius = UbfModConfig.NEANDERTHAL_CAVE_RADIUS.get();
+        double oreMultUpper = UbfModConfig.ORE_CHANCE_UPPER.get();
+        double oreMultDeep = UbfModConfig.ORE_CHANCE_DEEP.get();
+        double oreMultNether = UbfModConfig.ORE_CHANCE_NETHER.get();
 
         Block ubfFloor = UndergroundBiomesForgedModBlocks.UBF_FLOOR.get();
         Block ubfWall = UndergroundBiomesForgedModBlocks.UBF_WALL.get();
         Block ubfCeiling = UndergroundBiomesForgedModBlocks.UBF_CEILING.get();
 
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                int worldX = minX + x;
-                int worldZ = minZ + z;
+        long chunkSeed = ((long) chunk.getPos().x << 32) | (chunk.getPos().z & 0xFFFFFFFFL);
+        java.util.Random blockRand = new java.util.Random(chunkSeed);
 
-                for (int worldY = minY; worldY < maxY; worldY++) { // Wichtig: < maxY, da max außerhalb liegt
-                    pos.set(worldX, worldY, worldZ);
-                    BlockState currentState = chunk.getBlockState(pos);
-                    Block currentBlock = currentState.getBlock();
+        LevelChunkSection[] sections = chunk.getSections();
+        for (int sectionIdx = 0; sectionIdx < sections.length; sectionIdx++) {
+            LevelChunkSection section = sections[sectionIdx];
 
-                    if (currentBlock == ubfFloor || currentBlock == ubfWall || currentBlock == ubfCeiling) {
+            if (section == null || section.hasOnlyAir()) {
+                continue;
+            }
 
-                        long posHash = pos.asLong();
-                        java.util.Random blockRand = new java.util.Random(posHash);
-                        double oreChance = blockRand.nextDouble();
+            int sectionMinY = chunk.getSectionYFromSectionIndex(sectionIdx) << 4;
+            if (sectionMinY < minY || sectionMinY > maxY) {
+                continue;
+            }
 
-                        BlockState finalState;
+            for (int y = 0; y < 16; y++) {
+                int worldY = sectionMinY + y;
+                if (worldY < minY || worldY > maxY)
+                    continue;
 
-                        // Erz-Injektion
-                        if (isDeepWorld) {
-                            if (worldY < 0) {
-                                finalState = getDeepOreState(oreChance);
+                for (int x = 0; x < 16; x++) {
+                    int worldX = minX + x;
+
+                    for (int z = 0; z < 16; z++) {
+                        int worldZ = minZ + z;
+
+                        BlockState currentState = section.getBlockState(x, y, z);
+                        Block currentBlock = currentState.getBlock();
+
+                        if (currentBlock == ubfFloor || currentBlock == ubfWall || currentBlock == ubfCeiling) {
+
+                            double oreChance = blockRand.nextDouble();
+                            BlockState finalState;
+
+                            // Erz-Injektion (nutzt jetzt die schnellen lokalen Cache-Variablen!)
+                            if (isDeepWorld) {
+                                finalState = (worldY < 0) ? getDeepOreState(oreChance, oreMultDeep)
+                                        : getUpperOreState(oreChance, oreMultUpper);
                             } else {
-                                finalState = getUpperOreState(oreChance);
+                                finalState = getNetherOreState(oreChance, oreMultNether);
                             }
-                        } else {
-                            finalState = getNetherOreState(oreChance);
-                        }
 
-                        // Gesteins-Blending ausführen, wenn kein Erz gewürfelt wurde
-                        if (finalState == null) {
-                            double blendNoise = UndergroundBiomesForgedNoiseGenerator.sampleTunnelDensity(
-                                    (int) (worldX * 2.5),
-                                    (int) (worldY * 3.0),
-                                    (int) (worldZ * 2.5));
-                            finalState = UndergroundBiomesForgedMaterialResolver
-                                    .resolvePlaceholder(chunk, currentState, pos, blendNoise);
-                        }
+                            if (finalState == null) {
+                                double blendNoise = UndergroundBiomesForgedNoiseGenerator.sampleTunnelDensity(
+                                        (int) (worldX * 2.5),
+                                        (int) (worldY * 3.0),
+                                        (int) (worldZ * 2.5));
+                                BlockPos pos = new BlockPos(worldX, worldY, worldZ);
+                                finalState = UndergroundBiomesForgedMaterialResolver
+                                        .resolvePlaceholder(chunk, currentState, pos, blendNoise);
+                            }
 
-                        // Der eigentliche Austausch der Blöcke
-                        chunk.setBlockState(pos, finalState, false);
+                            section.setBlockState(x, y, z, finalState, false);
+                        }
                     }
                 }
             }
         }
 
         // --- NEANDERTHALER HÖHLEN-GENERIERUNG ---
-        long chunkSeed = ((long) chunk.getPos().x << 32) != 0 ? ((long) chunk.getPos().x << 32)
-                : (long) chunk.getPos().z;
-        java.util.Random rand = new java.util.Random(chunkSeed);
+        if (blockRand.nextDouble() < neanderthalChance) {
+            int randomX = minX + blockRand.nextInt(16);
+            int randomZ = minZ + blockRand.nextInt(16);
+            int randomY = isDeepWorld ? (-30 + blockRand.nextInt(60)) : (20 + blockRand.nextInt(70));
 
-        if (rand.nextDouble() < de.erythrocraft.undergroundbiomesforged.config.UbfModConfig.NEANDERTHAL_CAVE_CHANCE
-                .get()) {
-            int randomX = minX + rand.nextInt(16);
-            int randomZ = minZ + rand.nextInt(16);
-            // Sichere Höhengrenzen für das Platzieren der Neandertaler-Höhle
-            int randomY = isDeepWorld ? (-30 + rand.nextInt(60)) : (20 + rand.nextInt(70));
+            BlockPos spawnPos = new BlockPos(randomX, randomY, randomZ);
 
-            final BlockPos spawnPos = new BlockPos(randomX, randomY, randomZ);
-            final ResourceKey<Level> currentDimension = isDeepWorld ? Level.OVERWORLD : Level.NETHER;
+            if (chunk instanceof WorldGenLevel worldGenLevel && worldGenLevel.getBlockState(spawnPos).isAir()) {
 
-            UndergroundBiomesForgedMod.queueServerWork(1, () -> {
-                ServerLevel serverLevel = ServerLifecycleHooks.getCurrentServer().getLevel(currentDimension);
-                if (serverLevel != null && serverLevel.getBlockState(spawnPos).isAir()) {
+                de.erythrocraft.undergroundbiomesforged.worldgen.NeanderthalCavePiece cave = new de.erythrocraft.undergroundbiomesforged.worldgen.NeanderthalCavePiece(
+                        spawnPos);
 
-                    de.erythrocraft.undergroundbiomesforged.worldgen.NeanderthalCavePiece cave = new de.erythrocraft.undergroundbiomesforged.worldgen.NeanderthalCavePiece(
-                            spawnPos);
+                // Box dynamisch an den gecachten Radius anpassen!
+                BoundingBox totalBox = new BoundingBox(
+                        spawnPos.getX() - neanderthalRadius, spawnPos.getY() - neanderthalRadius,
+                        spawnPos.getZ() - neanderthalRadius,
+                        spawnPos.getX() + neanderthalRadius, spawnPos.getY() + neanderthalRadius,
+                        spawnPos.getZ() + neanderthalRadius);
 
-                    net.minecraft.world.level.levelgen.structure.BoundingBox totalBox = new net.minecraft.world.level.levelgen.structure.BoundingBox(
-                            spawnPos.getX() - 5, spawnPos.getY() - 5, spawnPos.getZ() - 5,
-                            spawnPos.getX() + 5, spawnPos.getY() + 5, spawnPos.getZ() + 5);
-
-                    cave.postProcess(
-                            serverLevel,
-                            serverLevel.structureManager(),
-                            serverLevel.getChunkSource().getGenerator(),
-                            serverLevel.getRandom(),
-                            totalBox,
-                            new net.minecraft.world.level.ChunkPos(spawnPos),
-                            spawnPos);
-                }
-            });
+                cave.postProcess(
+                        worldGenLevel,
+                        null,
+                        null,
+                        worldGenLevel.getRandom(),
+                        totalBox,
+                        new net.minecraft.world.level.ChunkPos(spawnPos),
+                        spawnPos);
+            }
         }
     }
 
-    private static BlockState getUpperOreState(double chance) {
-        if (chance < 0.020)
+    // Methoden angepasst, um die Multiplikatoren direkt als schnellen Parameter zu
+    // empfangen
+    private static BlockState getUpperOreState(double chance, double mult) {
+        if (chance < (0.020 * mult))
             return Blocks.COAL_ORE.defaultBlockState();
-        if (chance < 0.035)
+        if (chance < (0.035 * mult))
             return Blocks.IRON_ORE.defaultBlockState();
-        if (chance < 0.042)
+        if (chance < (0.042 * mult))
             return Blocks.COPPER_ORE.defaultBlockState();
-        if (chance < 0.045)
+        if (chance < (0.045 * mult))
             return Blocks.GOLD_ORE.defaultBlockState();
         return null;
     }
 
-    private static BlockState getDeepOreState(double chance) {
-        if (chance < 0.015)
+    private static BlockState getDeepOreState(double chance, double mult) {
+        if (chance < (0.015 * mult))
             return Blocks.DEEPSLATE_REDSTONE_ORE.defaultBlockState();
-        if (chance < 0.028)
+        if (chance < (0.028 * mult))
             return Blocks.DEEPSLATE_IRON_ORE.defaultBlockState();
-        if (chance < 0.038)
+        if (chance < (0.038 * mult))
             return Blocks.DEEPSLATE_LAPIS_ORE.defaultBlockState();
-        if (chance < 0.045)
+        if (chance < (0.045 * mult))
             return Blocks.DEEPSLATE_GOLD_ORE.defaultBlockState();
-        if (chance < 0.049)
+        if (chance < (0.049 * mult))
             return Blocks.DEEPSLATE_DIAMOND_ORE.defaultBlockState();
         return null;
     }
 
-    private static BlockState getNetherOreState(double chance) {
-        if (chance < 0.030)
+    private static BlockState getNetherOreState(double chance, double mult) {
+        if (chance < (0.030 * mult))
             return Blocks.NETHER_QUARTZ_ORE.defaultBlockState();
-        if (chance < 0.050)
+        if (chance < (0.050 * mult))
             return Blocks.NETHER_GOLD_ORE.defaultBlockState();
-        if (chance < 0.053)
+        if (chance < (0.053 * mult))
             return Blocks.ANCIENT_DEBRIS.defaultBlockState();
         return null;
     }
