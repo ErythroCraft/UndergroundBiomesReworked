@@ -1,15 +1,10 @@
 package de.erythrocraft.undergroundbiomesforged.worldgen;
 
-import de.erythrocraft.undergroundbiomesforged.UndergroundBiomesForgedMod;
-import de.erythrocraft.undergroundbiomesforged.init.UndergroundBiomesForgedModBlocks;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import de.erythrocraft.undergroundbiomesforged.init.UndergroundBiomesForgedModBlocks;
 
 public class UndergroundBiomesForgedMaterialResolver {
 
@@ -34,44 +29,6 @@ public class UndergroundBiomesForgedMaterialResolver {
             type = UbfBiomeConfig.TYPE_FLOOR;
         } else if (currentBlock == ubfCeiling) {
             type = UbfBiomeConfig.TYPE_CEILING;
-        }
-
-        if (currentBlock == ubfWall) {
-            long posHash = pos.asLong();
-            java.util.Random rand = new java.util.Random(posHash);
-
-            if (rand.nextDouble() < 0.0005) {
-                final BlockPos spawnPos = pos.immutable();
-                final ResourceKey<Level> currentDimension = chunk instanceof net.minecraft.world.level.chunk.LevelChunk levelChunk
-                        ? levelChunk.getLevel().dimension()
-                        : Level.OVERWORLD;
-
-                UndergroundBiomesForgedMod.queueServerWork(1, () -> {
-                    ServerLevel serverLevel = ServerLifecycleHooks.getCurrentServer().getLevel(currentDimension);
-
-                    if (serverLevel != null) {
-                        if (currentDimension == Level.NETHER && (spawnPos.getY() < 10 || spawnPos.getY() > 115)) {
-                            return;
-                        }
-
-                        de.erythrocraft.undergroundbiomesforged.worldgen.NeanderthalCavePiece cave = new de.erythrocraft.undergroundbiomesforged.worldgen.NeanderthalCavePiece(
-                                spawnPos);
-
-                        net.minecraft.world.level.levelgen.structure.BoundingBox totalBox = new net.minecraft.world.level.levelgen.structure.BoundingBox(
-                                spawnPos.getX() - 5, spawnPos.getY() - 5, spawnPos.getZ() - 5,
-                                spawnPos.getX() + 5, spawnPos.getY() + 5, spawnPos.getZ() + 5);
-
-                        cave.postProcess(
-                                serverLevel,
-                                serverLevel.structureManager(),
-                                serverLevel.getChunkSource().getGenerator(),
-                                serverLevel.getRandom(),
-                                totalBox,
-                                new net.minecraft.world.level.ChunkPos(spawnPos),
-                                spawnPos);
-                    }
-                });
-            }
         }
 
         BlockState primary = UbfBiomeConfig.getPrimaryReplacement(type, pos);
