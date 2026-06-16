@@ -1,0 +1,29 @@
+{
+    "replace": false,
+    "values": [
+        "underground_biomes_forged:granite_ubf",
+        "underground_biomes_forged:rhyolite_ubf",
+        "underground_biomes_forged:andesite_ubf",
+        "underground_biomes_forged:gabbro_ubf",
+        "underground_biomes_forged:basalt_ubf",
+        "underground_biomes_forged:komatiite_ubf",
+        "underground_biomes_forged:dacite_ubf",
+        "underground_biomes_forged:pegmatite_ubf",
+        "underground_biomes_forged:gneiss_ubf",
+        "underground_biomes_forged:eclogite_ubf",
+        "underground_biomes_forged:marble_ubf",
+        "underground_biomes_forged:quartzite_ubf",
+        "underground_biomes_forged:schist_ubf",
+        "underground_biomes_forged:amphibolite_ubf",
+        "underground_biomes_forged:slate_ubf",
+        "underground_biomes_forged:soapstone_ubf",
+        "underground_biomes_forged:limestone_ubf",
+        "underground_biomes_forged:chalk_ubf",
+        "underground_biomes_forged:shale_ubf",
+        "underground_biomes_forged:siltstone_ubf",
+        "underground_biomes_forged:sandstone_ubf",
+        "underground_biomes_forged:lignite_ubf",
+        "underground_biomes_forged:dolomite_ubf",
+        "underground_biomes_forged:flint_ubf"
+    ]
+}
