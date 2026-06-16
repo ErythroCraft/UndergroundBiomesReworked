@@ -3,6 +3,7 @@ package de.erythrocraft.undergroundbiomesforged.worldgen;
 import de.erythrocraft.undergroundbiomesforged.UndergroundBiomesForgedMod;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -18,12 +19,15 @@ public class UndergroundBiomesForgedWorldGenEvents {
     @SubscribeEvent
     public static void onChunkLoad(ChunkEvent.Load event) {
         LevelAccessor level = event.getLevel();
+
         if (level != null && !level.isClientSide()) {
             ChunkAccess chunk = event.getChunk();
-            if (!event.isNewChunk()) {
+
+            if (chunk != null && chunk.getStatus().isOrAfter(ChunkStatus.FULL) && event.isNewChunk()) {
+
                 UndergroundBiomesForgedCarver.carveTunnelChunk(chunk);
+                UndergroundBiomesForgedOreInjector.resolveAndInjectChunk(chunk);
             }
-            UndergroundBiomesForgedOreInjector.resolveAndInjectChunk(chunk);
         }
     }
 }

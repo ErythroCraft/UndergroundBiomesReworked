@@ -19,14 +19,23 @@ public class UndergroundBiomesForgedOreInjector {
         throw new UnsupportedOperationException("Dies ist eine Utility-Klasse.");
     }
 
+    /**
+     * Führt die Ersetzung der Platzhalter-Blöcke durch echte Gesteine und Erze aus.
+     * Scanniert jetzt die VOLLE Bauhöhe des Chunks, um unzerstörbare Reste zu
+     * verhindern.
+     */
     public static void resolveAndInjectChunk(ChunkAccess chunk) {
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
         int minX = chunk.getPos().getMinBlockX();
         int minZ = chunk.getPos().getMinBlockZ();
 
-        boolean isDeepWorld = chunk.getMinBuildHeight() < 3;
-        int minY = isDeepWorld ? -62 : 0;
-        int maxY = isDeepWorld ? 1 : 62;
+        // --- KORREKTUR: SCANNEN DER VOLLE BAUHÖHE ---
+        // Anstatt starr bei Y=60 aufzuhören, fragen wir den Chunk nach seiner echten
+        // Deckenhöhe!
+        // In der Oberwelt scannt er nun von -64 bis weit über 60+ (je nach Berg-Biom).
+        boolean isDeepWorld = chunk.getMinBuildHeight() < 0;
+        int minY = chunk.getMinBuildHeight();
+        int maxY = chunk.getMaxBuildHeight();
 
         Block ubfFloor = UndergroundBiomesForgedModBlocks.UBF_FLOOR.get();
         Block ubfWall = UndergroundBiomesForgedModBlocks.UBF_WALL.get();
@@ -37,36 +46,31 @@ public class UndergroundBiomesForgedOreInjector {
                 int worldX = minX + x;
                 int worldZ = minZ + z;
 
-                for (int worldY = minY; worldY <= maxY; worldY++) {
+                for (int worldY = minY; worldY < maxY; worldY++) { // Wichtig: < maxY, da max außerhalb liegt
                     pos.set(worldX, worldY, worldZ);
                     BlockState currentState = chunk.getBlockState(pos);
                     Block currentBlock = currentState.getBlock();
 
                     if (currentBlock == ubfFloor || currentBlock == ubfWall || currentBlock == ubfCeiling) {
 
-                        // 1. STABILER ZUFALLSWERT FÜR JEDEN BLOCK
                         long posHash = pos.asLong();
                         java.util.Random blockRand = new java.util.Random(posHash);
                         double oreChance = blockRand.nextDouble();
 
                         BlockState finalState;
 
-                        // 2. ERZ-INJEKTION (Getrennt nach Oberwelt, Tiefen & Nether)
+                        // Erz-Injektion
                         if (isDeepWorld) {
                             if (worldY < 0) {
-                                // --- DEEP LAYER ERZE (Y < 0) ---
                                 finalState = getDeepOreState(oreChance);
                             } else {
-                                // --- UPPER LAYER ERZE (Y >= 0) ---
                                 finalState = getUpperOreState(oreChance);
                             }
                         } else {
-                            // --- NETHER ERZE ---
                             finalState = getNetherOreState(oreChance);
                         }
 
-                        // Wenn kein Erz gewürfelt wurde (finalState ist null), nutzen wir das normale
-                        // Gesteins-Blending
+                        // Gesteins-Blending ausführen, wenn kein Erz gewürfelt wurde
                         if (finalState == null) {
                             double blendNoise = UndergroundBiomesForgedNoiseGenerator.sampleTunnelDensity(
                                     (int) (worldX * 2.5),
@@ -76,20 +80,23 @@ public class UndergroundBiomesForgedOreInjector {
                                     .resolvePlaceholder(chunk, currentState, pos, blendNoise);
                         }
 
+                        // Der eigentliche Austausch der Blöcke
                         chunk.setBlockState(pos, finalState, false);
                     }
                 }
             }
         }
 
-        // --- NEANDERTHALER HÖHLEN-GENERIERUNG AUF CHUNK-EBENE (BLEIBT UNVERÄNDERT) ---
+        // --- NEANDERTHALER HÖHLEN-GENERIERUNG ---
         long chunkSeed = ((long) chunk.getPos().x << 32) != 0 ? ((long) chunk.getPos().x << 32)
                 : (long) chunk.getPos().z;
         java.util.Random rand = new java.util.Random(chunkSeed);
 
-        if (rand.nextDouble() < 0.15) {
+        if (rand.nextDouble() < de.erythrocraft.undergroundbiomesforged.config.UbfModConfig.NEANDERTHAL_CAVE_CHANCE
+                .get()) {
             int randomX = minX + rand.nextInt(16);
             int randomZ = minZ + rand.nextInt(16);
+            // Sichere Höhengrenzen für das Platzieren der Neandertaler-Höhle
             int randomY = isDeepWorld ? (-30 + rand.nextInt(60)) : (20 + rand.nextInt(70));
 
             final BlockPos spawnPos = new BlockPos(randomX, randomY, randomZ);
@@ -119,10 +126,6 @@ public class UndergroundBiomesForgedOreInjector {
         }
     }
 
-    /**
-     * Bestimmt, ob ein Erz in der oberen Schicht der Oberwelt spawnt.
-     * Erhöhte Chancen (z.B. 2% Kohle, 1.5% Eisen etc.)
-     */
     private static BlockState getUpperOreState(double chance) {
         if (chance < 0.020)
             return Blocks.COAL_ORE.defaultBlockState();
@@ -132,13 +135,9 @@ public class UndergroundBiomesForgedOreInjector {
             return Blocks.COPPER_ORE.defaultBlockState();
         if (chance < 0.045)
             return Blocks.GOLD_ORE.defaultBlockState();
-        return null; // Kein Erz -> Generiere normalen UBF-Stein
+        return null;
     }
 
-    /**
-     * Bestimmt, ob ein Erz in den Tiefen (Deepslate-Ebene) spawnt.
-     * Nutzt die Tiefenschiefer-Varianten (Deepslate Ores).
-     */
     private static BlockState getDeepOreState(double chance) {
         if (chance < 0.015)
             return Blocks.DEEPSLATE_REDSTONE_ORE.defaultBlockState();
@@ -149,20 +148,17 @@ public class UndergroundBiomesForgedOreInjector {
         if (chance < 0.045)
             return Blocks.DEEPSLATE_GOLD_ORE.defaultBlockState();
         if (chance < 0.049)
-            return Blocks.DEEPSLATE_DIAMOND_ORE.defaultBlockState(); // Erhöhte Diamanten-Chance!
+            return Blocks.DEEPSLATE_DIAMOND_ORE.defaultBlockState();
         return null;
     }
 
-    /**
-     * Bestimmt, ob ein Erz im Nether spawnt.
-     */
     private static BlockState getNetherOreState(double chance) {
         if (chance < 0.030)
             return Blocks.NETHER_QUARTZ_ORE.defaultBlockState();
         if (chance < 0.050)
             return Blocks.NETHER_GOLD_ORE.defaultBlockState();
         if (chance < 0.053)
-            return Blocks.ANCIENT_DEBRIS.defaultBlockState(); // Seltenes antiker Schrott!
+            return Blocks.ANCIENT_DEBRIS.defaultBlockState();
         return null;
     }
 }

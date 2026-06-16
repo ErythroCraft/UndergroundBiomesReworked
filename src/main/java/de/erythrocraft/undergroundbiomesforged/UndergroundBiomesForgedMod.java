@@ -38,6 +38,10 @@ public class UndergroundBiomesForgedMod {
 	public static final String MODID = "underground_biomes_forged";
 
 	public UndergroundBiomesForgedMod(FMLJavaModLoadingContext context) {
+		context.registerConfig(
+				net.minecraftforge.fml.config.ModConfig.Type.COMMON,
+				de.erythrocraft.undergroundbiomesforged.config.UbfModConfig.SPEC);
+
 		LOGGER.info("Underground Biomes Forged (UBF) wird initialisiert...");
 
 		IEventBus bus = context.getModEventBus();

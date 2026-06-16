@@ -92,7 +92,7 @@ public class UndergroundBiomesForgedModBlocks {
 	private static BlockBehaviour.Properties createPlaceholderProperties() {
 		return BlockBehaviour.Properties.copy(Blocks.STONE)
 				.mapColor(MapColor.STONE)
-				.strength(-1.0F, 3600000.0F)
+				.strength(1.5F, 6.0F)
 				.sound(SoundType.STONE)
 				.noLootTable();
 	}
