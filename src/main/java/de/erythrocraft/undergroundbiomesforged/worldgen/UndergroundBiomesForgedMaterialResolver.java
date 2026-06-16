@@ -1,13 +1,15 @@
 package de.erythrocraft.undergroundbiomesforged.worldgen;
 
+import de.erythrocraft.undergroundbiomesforged.UndergroundBiomesForgedMod;
+import de.erythrocraft.undergroundbiomesforged.init.UndergroundBiomesForgedModBlocks;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraftforge.server.ServerLifecycleHooks; // Import für den sicheren Server-Zugriff
-import de.erythrocraft.undergroundbiomesforged.init.UndergroundBiomesForgedModBlocks;
-import de.erythrocraft.undergroundbiomesforged.UndergroundBiomesForgedMod;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 public class UndergroundBiomesForgedMaterialResolver {
 
@@ -34,7 +36,8 @@ public class UndergroundBiomesForgedMaterialResolver {
             type = UbfBiomeConfig.TYPE_CEILING;
         }
 
-        // --- NEANDERTHALER HÖHLEN VIA SERVER QUEUE ---
+        // --- DYNAMISCHE HÖHLEN GENERIERUNG (OVERWORLD & NETHER) ---
+        // --- UNIVERSELLE HÖHLEN GENERIERUNG (ALLE DIMENSIONEN) ---
         if (currentBlock == ubfWall) {
             long posHash = pos.asLong();
             java.util.Random rand = new java.util.Random(posHash);
@@ -42,13 +45,24 @@ public class UndergroundBiomesForgedMaterialResolver {
             if (rand.nextDouble() < 0.0005) {
                 final BlockPos spawnPos = pos.immutable();
 
+                // DER TRICK: Wir holen uns den exakten Registrierungs-Schlüssel der aktuellen
+                // Welt!
+                // Egal ob Vanilla (Overworld, Nether, End) oder Mod-Dimensionen (z.B. Twilight
+                // Forest)
+                final ResourceKey<Level> currentDimension = chunk instanceof net.minecraft.world.level.chunk.LevelChunk levelChunk
+                        ? levelChunk.getLevel().dimension()
+                        : Level.OVERWORLD; // Sicherheits-Fallback
+
                 UndergroundBiomesForgedMod.queueServerWork(1, () -> {
-                    // Wir holen uns das ServerLevel sicher über Forge's Server-Lifecycles,
-                    // da die Queue im Server-Thread läuft (OVERWORLD als Standard-Ziel für Höhlen)
-                    ServerLevel serverLevel = ServerLifecycleHooks.getCurrentServer()
-                            .getLevel(net.minecraft.world.level.Level.OVERWORLD);
+                    ServerLevel serverLevel = ServerLifecycleHooks.getCurrentServer().getLevel(currentDimension);
 
                     if (serverLevel != null) {
+                        // Sicherheits-Check für die Nether-Höhen (gilt nur, wenn wir auch wirklich im
+                        // Nether sind)
+                        if (currentDimension == Level.NETHER && (spawnPos.getY() < 10 || spawnPos.getY() > 115)) {
+                            return;
+                        }
+
                         de.erythrocraft.undergroundbiomesforged.worldgen.NeanderthalCavePiece cave = new de.erythrocraft.undergroundbiomesforged.worldgen.NeanderthalCavePiece(
                                 spawnPos);
 
@@ -68,6 +82,7 @@ public class UndergroundBiomesForgedMaterialResolver {
                 });
             }
         }
+
         // --- ENDE DER ERWEITERUNG ---
 
         BlockState primary = UbfBiomeConfig.getPrimaryReplacement(type, pos);
