@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <option name="defaultObfuscationEnv" value="searge" />
+        <option name="mappingTypes" value="tsrg" />
+        <option name="outRefMapFile" value="C:\Users\moton\MCreatorWorkspaces\underground_biomes_forged\build\mixin\underground_biomes_forged.refmap.json" />
+        <option name="outTsrgFile" value="C:\Users\moton\MCreatorWorkspaces\underground_biomes_forged\build\mixin\underground_biomes_forged.refmap.json.mappings.tsrg" />
+        <option name="pluginVersion" value="0.7" />
+        <option name="reobfTsrgFile" value="C:\Users\moton\MCreatorWorkspaces\underground_biomes_forged\build\moddev\artifacts\namedToIntermediate.tsrg" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/6d1c8bf4c28e697f472a83bd6add76ec4951734/mixin-0.8.5-processor.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.llamalad7/mixinextras-common/0.5.0/286da96036621082491d971dfc62bee8fc37d161/mixinextras-common-0.5.0.jar" />
+        </processorPath>
+        <module name="underground_biomes_forged.main" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="17" />
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="underground_biomes_forged.main" options="-AreobfTsrgFile=C:\Users\moton\MCreatorWorkspaces\underground_biomes_forged\build\moddev\artifacts\namedToIntermediate.tsrg -AoutTsrgFile=C:\Users\moton\MCreatorWorkspaces\underground_biomes_forged\build\mixin\underground_biomes_forged.refmap.json.mappings.tsrg -AoutRefMapFile=C:\Users\moton\MCreatorWorkspaces\underground_biomes_forged\build\mixin\underground_biomes_forged.refmap.json -AmappingTypes=tsrg -ApluginVersion=0.7 -AdefaultObfuscationEnv=searge" />
+    </option>
+  </component>
+</project>
