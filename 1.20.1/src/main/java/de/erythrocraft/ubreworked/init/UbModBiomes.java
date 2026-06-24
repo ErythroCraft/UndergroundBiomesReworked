@@ -1,4 +1,4 @@
-package de.erythrocraft.undergroundbiomesforged.init;
+package de.erythrocraft.ubreworked.init;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import com.google.common.base.Suppliers;
 import com.mojang.datafixers.util.Pair;
 
-import de.erythrocraft.undergroundbiomesforged.UndergroundBiomesForgedMod;
+import de.erythrocraft.ubreworked.UndergroundBiomesReworkedMod;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Registry;
@@ -36,18 +36,18 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegisterEvent;
 
-@Mod.EventBusSubscriber(modid = UndergroundBiomesForgedMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = UndergroundBiomesReworkedMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 @SuppressWarnings("null")
-public class UndergroundBiomesForgedModBiomes {
+public class UbModBiomes {
 
 	public static final ResourceKey<Biome> BIOME_TOP = ResourceKey.create(Registries.BIOME,
-			ResourceLocation.fromNamespaceAndPath(UndergroundBiomesForgedMod.MODID, "underground_top"));
+			ResourceLocation.fromNamespaceAndPath(UndergroundBiomesReworkedMod.MODID, "underground_top"));
 	public static final ResourceKey<Biome> BIOME_DOWN = ResourceKey.create(Registries.BIOME,
-			ResourceLocation.fromNamespaceAndPath(UndergroundBiomesForgedMod.MODID, "underground_down"));
+			ResourceLocation.fromNamespaceAndPath(UndergroundBiomesReworkedMod.MODID, "underground_down"));
 	public static final ResourceKey<Biome> BIOME_SIDE = ResourceKey.create(Registries.BIOME,
-			ResourceLocation.fromNamespaceAndPath(UndergroundBiomesForgedMod.MODID, "underground_side"));
+			ResourceLocation.fromNamespaceAndPath(UndergroundBiomesReworkedMod.MODID, "underground_side"));
 
-	private UndergroundBiomesForgedModBiomes() {
+	private UbModBiomes() {
 		throw new UnsupportedOperationException("Dies ist eine Utility-Klasse.");
 	}
 
@@ -82,7 +82,7 @@ public class UndergroundBiomesForgedModBiomes {
 				.build();
 	}
 
-	@Mod.EventBusSubscriber(modid = UndergroundBiomesForgedMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+	@Mod.EventBusSubscriber(modid = UndergroundBiomesReworkedMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 	public static class ForgeForgeLifecycleEvents {
 
 		private ForgeForgeLifecycleEvents() {
@@ -125,7 +125,7 @@ public class UndergroundBiomesForgedModBiomes {
 					}
 
 					if (chunkGenerator instanceof NoiseBasedChunkGenerator noiseGenerator) {
-						((UndergroundBiomesForgedModNoiseGeneratorSettings) (Object) noiseGenerator.settings.value())
+						((UndergroundBiomesReworkedModNoiseGeneratorSettings) (Object) noiseGenerator.settings.value())
 								.undergroundBiomesForgedDimensionTypeReference(dimensionType);
 					}
 				}
@@ -144,9 +144,9 @@ public class UndergroundBiomesForgedModBiomes {
 	private static SurfaceRules.RuleSource injectOverworldSurfaceRules(SurfaceRules.RuleSource currentRuleSource) {
 		List<SurfaceRules.RuleSource> customSurfaceRules = new ArrayList<>();
 
-		BlockState floorState = UndergroundBiomesForgedModBlocks.UBF_FLOOR.get().defaultBlockState();
-		BlockState wallState = UndergroundBiomesForgedModBlocks.UBF_WALL.get().defaultBlockState();
-		BlockState ceilingState = UndergroundBiomesForgedModBlocks.UBF_CEILING.get().defaultBlockState();
+		BlockState floorState = UbModBlocks.UBF_FLOOR.get().defaultBlockState();
+		BlockState wallState = UbModBlocks.UBF_WALL.get().defaultBlockState();
+		BlockState ceilingState = UbModBlocks.UBF_CEILING.get().defaultBlockState();
 
 		customSurfaceRules.add(SurfaceRules.ifTrue(
 				SurfaceRules.isBiome(BIOME_TOP),
@@ -175,7 +175,7 @@ public class UndergroundBiomesForgedModBiomes {
 		return SurfaceRules.sequence(customSurfaceRules.toArray(SurfaceRules.RuleSource[]::new));
 	}
 
-	public interface UndergroundBiomesForgedModNoiseGeneratorSettings {
+	public interface UndergroundBiomesReworkedModNoiseGeneratorSettings {
 		void undergroundBiomesForgedDimensionTypeReference(Holder<DimensionType> dimensionType);
 	}
 

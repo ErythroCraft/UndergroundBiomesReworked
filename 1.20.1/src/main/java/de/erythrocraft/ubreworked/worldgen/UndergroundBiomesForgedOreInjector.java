@@ -1,7 +1,7 @@
-package de.erythrocraft.undergroundbiomesforged.worldgen;
+package de.erythrocraft.ubreworked.worldgen;
 
-import de.erythrocraft.undergroundbiomesforged.config.UbfModConfig;
-import de.erythrocraft.undergroundbiomesforged.init.UndergroundBiomesForgedModBlocks;
+import de.erythrocraft.ubreworked.config.UbModConfig;
+import de.erythrocraft.ubreworked.init.UbModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -23,17 +23,17 @@ public class UndergroundBiomesForgedOreInjector {
 
         boolean isDeepWorld = chunk.getMinBuildHeight() < 0;
         int minY = chunk.getMinBuildHeight();
-        int maxY = isDeepWorld ? 64 : 127;
+        int maxY = isDeepWorld ? 64 : 108;
 
-        double neanderthalChance = UbfModConfig.NEANDERTHAL_CAVE_CHANCE.get();
-        int neanderthalRadius = Math.min(UbfModConfig.NEANDERTHAL_CAVE_RADIUS.get(), 5); // Schutzgrenze
-        double oreMultUpper = UbfModConfig.ORE_CHANCE_UPPER.get();
-        double oreMultDeep = UbfModConfig.ORE_CHANCE_DEEP.get();
-        double oreMultNether = UbfModConfig.ORE_CHANCE_NETHER.get();
+        double neanderthalChance = UbModConfig.NEANDERTHAL_CAVE_CHANCE.get();
+        int neanderthalRadius = Math.min(UbModConfig.NEANDERTHAL_CAVE_RADIUS.get(), 5); // Schutzgrenze
+        double oreMultUpper = UbModConfig.ORE_CHANCE_UPPER.get();
+        double oreMultDeep = UbModConfig.ORE_CHANCE_DEEP.get();
+        double oreMultNether = UbModConfig.ORE_CHANCE_NETHER.get();
 
-        Block ubfFloor = UndergroundBiomesForgedModBlocks.UBF_FLOOR.get();
-        Block ubfWall = UndergroundBiomesForgedModBlocks.UBF_WALL.get();
-        Block ubfCeiling = UndergroundBiomesForgedModBlocks.UBF_CEILING.get();
+        Block ubfFloor = UbModBlocks.UBF_FLOOR.get();
+        Block ubfWall = UbModBlocks.UBF_WALL.get();
+        Block ubfCeiling = UbModBlocks.UBF_CEILING.get();
 
         long chunkSeed = ((long) chunk.getPos().x << 32) | (chunk.getPos().z & 0xFFFFFFFFL);
         java.util.Random blockRand = new java.util.Random(chunkSeed);

@@ -1,9 +1,9 @@
-package de.erythrocraft.undergroundbiomesforged;
+package de.erythrocraft.ubreworked;
 
-import de.erythrocraft.undergroundbiomesforged.init.ModStructurePieces;
-import de.erythrocraft.undergroundbiomesforged.init.UndergroundBiomesForgedModBlocks;
-import de.erythrocraft.undergroundbiomesforged.init.UndergroundBiomesForgedModItems;
-import de.erythrocraft.undergroundbiomesforged.worldgen.UbfBiomeConfig;
+import de.erythrocraft.ubreworked.init.UbModStructurePieces;
+import de.erythrocraft.ubreworked.init.UbModBlocks;
+import de.erythrocraft.ubreworked.init.UbModItems;
+import de.erythrocraft.ubreworked.worldgen.UbfBiomeConfig;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,32 +30,32 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
-@Mod("underground_biomes_forged")
-@Mod.EventBusSubscriber(modid = UndergroundBiomesForgedMod.MODID)
+@Mod("underground_biomes_reworked")
+@Mod.EventBusSubscriber(modid = UndergroundBiomesReworkedMod.MODID)
 @SuppressWarnings("java:S1118")
-public class UndergroundBiomesForgedMod {
-	public static final Logger LOGGER = LogManager.getLogger(UndergroundBiomesForgedMod.class);
+public class UndergroundBiomesReworkedMod {
+	public static final Logger LOGGER = LogManager.getLogger(UndergroundBiomesReworkedMod.class);
 	public static final String MODID = "underground_biomes_forged";
 
-	public UndergroundBiomesForgedMod(FMLJavaModLoadingContext context) {
+	public UndergroundBiomesReworkedMod(FMLJavaModLoadingContext context) {
 		context.registerConfig(
 				net.minecraftforge.fml.config.ModConfig.Type.COMMON,
-				de.erythrocraft.undergroundbiomesforged.config.UbfModConfig.SPEC);
+				de.erythrocraft.ubreworked.config.UbModConfig.SPEC);
 
 		LOGGER.info("Underground Biomes Forged (UBF) wird initialisiert...");
 
 		IEventBus bus = context.getModEventBus();
 
-		UndergroundBiomesForgedModBlocks.REGISTRY.register(bus);
-		UndergroundBiomesForgedModItems.REGISTRY.register(bus);
+		UbModBlocks.REGISTRY.register(bus);
+		UbModItems.REGISTRY.register(bus);
 
-		ModStructurePieces.REGISTRY.register(bus);
+		UbModStructurePieces.REGISTRY.register(bus);
 	}
 
 	public static BlockState classifySurfaceType(Direction normal) {
-		Block floor = UndergroundBiomesForgedModBlocks.UBF_FLOOR.get();
-		Block wall = UndergroundBiomesForgedModBlocks.UBF_WALL.get();
-		Block ceiling = UndergroundBiomesForgedModBlocks.UBF_CEILING.get();
+		Block floor = UbModBlocks.UBF_FLOOR.get();
+		Block wall = UbModBlocks.UBF_WALL.get();
+		Block ceiling = UbModBlocks.UBF_CEILING.get();
 
 		float yNormal = normal.getStepY();
 
@@ -71,9 +71,9 @@ public class UndergroundBiomesForgedMod {
 	public static BlockState resolvePlaceholder(BlockState currentState, BlockPos pos, double blendNoise) {
 		Block currentBlock = currentState.getBlock();
 
-		Block ubfFloor = UndergroundBiomesForgedModBlocks.UBF_FLOOR.get();
-		Block ubfWall = UndergroundBiomesForgedModBlocks.UBF_WALL.get();
-		Block ubfCeiling = UndergroundBiomesForgedModBlocks.UBF_CEILING.get();
+		Block ubfFloor = UbModBlocks.UBF_FLOOR.get();
+		Block ubfWall = UbModBlocks.UBF_WALL.get();
+		Block ubfCeiling = UbModBlocks.UBF_CEILING.get();
 
 		if (currentBlock != ubfFloor && currentBlock != ubfWall && currentBlock != ubfCeiling) {
 			return currentState;

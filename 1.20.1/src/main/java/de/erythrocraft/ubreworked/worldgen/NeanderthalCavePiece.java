@@ -1,7 +1,7 @@
-package de.erythrocraft.undergroundbiomesforged.worldgen;
+package de.erythrocraft.ubreworked.worldgen;
 
-import de.erythrocraft.undergroundbiomesforged.config.UbfModConfig;
-import de.erythrocraft.undergroundbiomesforged.init.ModStructurePieces;
+import de.erythrocraft.ubreworked.config.UbModConfig;
+import de.erythrocraft.ubreworked.init.UbModStructurePieces;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
@@ -21,7 +21,7 @@ public class NeanderthalCavePiece extends StructurePiece {
     // der Regionen ab!
     // BoundingBox reicht lokal von 0 bis 10 in alle Achsen (Zentrum ist 5)
     public NeanderthalCavePiece(@javax.annotation.Nonnull BlockPos wallPos) {
-        super(ModStructurePieces.NEANDERTHAL_CAVE.get(), 0,
+        super(UbModStructurePieces.NEANDERTHAL_CAVE.get(), 0,
                 new BoundingBox(
                         wallPos.getX() - 5, wallPos.getY() - 5, wallPos.getZ() - 5,
                         wallPos.getX() + 5, wallPos.getY() + 5, wallPos.getZ() + 5));
@@ -30,7 +30,7 @@ public class NeanderthalCavePiece extends StructurePiece {
     public NeanderthalCavePiece(
             @javax.annotation.Nonnull StructurePieceSerializationContext context,
             @javax.annotation.Nonnull CompoundTag tag) {
-        super(ModStructurePieces.NEANDERTHAL_CAVE.get(), tag);
+        super(UbModStructurePieces.NEANDERTHAL_CAVE.get(), tag);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class NeanderthalCavePiece extends StructurePiece {
             @javax.annotation.Nonnull ChunkPos chunkPos,
             @javax.annotation.Nonnull BlockPos spawnPos) {
 
-        int configRadius = UbfModConfig.NEANDERTHAL_CAVE_RADIUS.get();
+        int configRadius = UbModConfig.NEANDERTHAL_CAVE_RADIUS.get();
 
         // Begrenzung, damit es nicht die BoundingBox des Konstruktors sprengt (Maximal
         // 5)

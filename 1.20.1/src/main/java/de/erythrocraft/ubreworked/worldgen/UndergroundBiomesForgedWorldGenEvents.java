@@ -1,6 +1,6 @@
-package de.erythrocraft.undergroundbiomesforged.worldgen;
+package de.erythrocraft.ubreworked.worldgen;
 
-import de.erythrocraft.undergroundbiomesforged.UndergroundBiomesForgedMod;
+import de.erythrocraft.ubreworked.UndergroundBiomesReworkedMod;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkStatus;
@@ -8,7 +8,7 @@ import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = UndergroundBiomesForgedMod.MODID)
+@Mod.EventBusSubscriber(modid = UndergroundBiomesReworkedMod.MODID)
 @SuppressWarnings("null")
 public class UndergroundBiomesForgedWorldGenEvents {
 

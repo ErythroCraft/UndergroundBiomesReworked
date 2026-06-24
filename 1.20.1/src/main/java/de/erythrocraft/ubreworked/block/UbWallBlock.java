@@ -1,4 +1,4 @@
-package de.erythrocraft.undergroundbiomesforged.block;
+package de.erythrocraft.ubreworked.block;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -6,8 +6,8 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
 @SuppressWarnings("null")
-public class UbfWallBlock extends Block {
-	public UbfWallBlock() {
+public class UbWallBlock extends Block {
+	public UbWallBlock() {
 		super(BlockBehaviour.Properties.copy(Blocks.STONE)
 				.sound(SoundType.STONE)
 				.strength(-1.0F, 3600000.0F)

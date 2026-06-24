@@ -1,10 +1,10 @@
-package de.erythrocraft.undergroundbiomesforged.worldgen;
+package de.erythrocraft.ubreworked.worldgen;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import de.erythrocraft.undergroundbiomesforged.init.UndergroundBiomesForgedModBlocks;
+import de.erythrocraft.ubreworked.init.UndergroundBiomesReworkedModBlocks;
 
 public class UndergroundBiomesForgedMaterialResolver {
 
@@ -16,9 +16,9 @@ public class UndergroundBiomesForgedMaterialResolver {
             double blendNoise) {
         Block currentBlock = currentState.getBlock();
 
-        Block ubfFloor = UndergroundBiomesForgedModBlocks.UBF_FLOOR.get();
-        Block ubfWall = UndergroundBiomesForgedModBlocks.UBF_WALL.get();
-        Block ubfCeiling = UndergroundBiomesForgedModBlocks.UBF_CEILING.get();
+        Block ubfFloor = UndergroundBiomesReworkedModBlocks.UBF_FLOOR.get();
+        Block ubfWall = UndergroundBiomesReworkedModBlocks.UBF_WALL.get();
+        Block ubfCeiling = UndergroundBiomesReworkedModBlocks.UBF_CEILING.get();
 
         if (currentBlock != ubfFloor && currentBlock != ubfWall && currentBlock != ubfCeiling) {
             return currentState;

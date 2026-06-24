@@ -1,6 +1,6 @@
-package de.erythrocraft.undergroundbiomesforged.worldgen;
+package de.erythrocraft.ubreworked.worldgen;
 
-import de.erythrocraft.undergroundbiomesforged.UndergroundBiomesForgedMod;
+import de.erythrocraft.ubreworked.UndergroundBiomesReworkedMod;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -54,7 +54,7 @@ public class UndergroundBiomesForgedSurfaceClassifier {
         if (length < 0.001) {
             // Sicherheits-Fallback: Falls keine klare Richtung erkennbar ist, ist es eine
             // Wand
-            return UndergroundBiomesForgedMod.classifySurfaceType(Direction.NORTH);
+            return UndergroundBiomesReworkedMod.classifySurfaceType(Direction.NORTH);
         }
 
         double normalizedY = gradY / length;
@@ -63,14 +63,14 @@ public class UndergroundBiomesForgedSurfaceClassifier {
         if (normalizedY > 0.6) {
             // Der Vektor zeigt steil nach oben -> Der Block befindet sich UNTER der Luft ->
             // BODEN
-            return UndergroundBiomesForgedMod.classifySurfaceType(Direction.UP);
+            return UndergroundBiomesReworkedMod.classifySurfaceType(Direction.UP);
         } else if (normalizedY < -0.6) {
             // Der Vektor zeigt steil nach unten -> Der Block befindet sich ÜBER der Luft ->
             // DECKE
-            return UndergroundBiomesForgedMod.classifySurfaceType(Direction.DOWN);
+            return UndergroundBiomesReworkedMod.classifySurfaceType(Direction.DOWN);
         } else {
             // Der Vektor ist flach/horizontal -> WAND
-            return UndergroundBiomesForgedMod.classifySurfaceType(Direction.NORTH);
+            return UndergroundBiomesReworkedMod.classifySurfaceType(Direction.NORTH);
         }
     }
 }

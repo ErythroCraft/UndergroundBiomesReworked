@@ -1,4 +1,4 @@
-package de.erythrocraft.undergroundbiomesforged.worldgen;
+package de.erythrocraft.ubreworked.worldgen;
 
 public class UndergroundBiomesForgedNoiseGenerator {
 

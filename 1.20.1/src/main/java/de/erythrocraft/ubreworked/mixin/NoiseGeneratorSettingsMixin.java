@@ -1,4 +1,4 @@
-package de.erythrocraft.undergroundbiomesforged.mixin;
+package de.erythrocraft.ubreworked.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -13,7 +13,7 @@ import net.minecraft.world.level.levelgen.SurfaceRules;
 
 @Mixin(NoiseGeneratorSettings.class)
 public class NoiseGeneratorSettingsMixin implements
-		de.erythrocraft.undergroundbiomesforged.init.UndergroundBiomesForgedModBiomes.UndergroundBiomesForgedModNoiseGeneratorSettings {
+		de.erythrocraft.ubreworked.init.UbModBiomes.UndergroundBiomesReworkedModNoiseGeneratorSettings {
 
 	@Unique
 	private Holder<DimensionType> undergroundBiomesForgedDimensionTypeReference;
@@ -23,7 +23,7 @@ public class NoiseGeneratorSettingsMixin implements
 		SurfaceRules.RuleSource retval = original.call();
 
 		if (this.undergroundBiomesForgedDimensionTypeReference != null) {
-			retval = de.erythrocraft.undergroundbiomesforged.init.UndergroundBiomesForgedModBiomes
+			retval = de.erythrocraft.ubreworked.init.UbModBiomes
 					.adaptSurfaceRule(retval, this.undergroundBiomesForgedDimensionTypeReference);
 		}
 

@@ -1,9 +1,9 @@
-package de.erythrocraft.undergroundbiomesforged.config;
+package de.erythrocraft.ubreworked.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-public class UbfModConfig {
-        private UbfModConfig() {
+public class UbModConfig {
+        private UbModConfig() {
                 /* This utility class should not be instantiated */
         }
 

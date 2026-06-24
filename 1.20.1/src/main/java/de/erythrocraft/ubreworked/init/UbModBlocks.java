@@ -1,6 +1,6 @@
-package de.erythrocraft.undergroundbiomesforged.init;
+package de.erythrocraft.ubreworked.init;
 
-import de.erythrocraft.undergroundbiomesforged.UndergroundBiomesForgedMod;
+import de.erythrocraft.ubreworked.UndergroundBiomesReworkedMod;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.world.level.block.Block;
@@ -13,9 +13,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 @SuppressWarnings({ "null" })
-public class UndergroundBiomesForgedModBlocks {
+public class UbModBlocks {
 	public static final DeferredRegister<Block> REGISTRY = DeferredRegister.create(ForgeRegistries.BLOCKS,
-			UndergroundBiomesForgedMod.MODID);
+			UndergroundBiomesReworkedMod.MODID);
 
 	// 1. DIE FUNKTIONALEN PLATZHALTER (Bleiben für Carver & OreInjector erhalten)
 	public static final RegistryObject<Block> UBF_FLOOR = REGISTRY.register("ubf_floor",
@@ -72,7 +72,7 @@ public class UndergroundBiomesForgedModBlocks {
 		registerStone("flint_ubf", MapColor.COLOR_BLACK);
 	}
 
-	private UndergroundBiomesForgedModBlocks() {
+	private UbModBlocks() {
 		throw new UnsupportedOperationException("Dies ist eine Utility-Klasse und darf nicht instanziiert werden.");
 	}
 

@@ -1,4 +1,4 @@
-package de.erythrocraft.undergroundbiomesforged.worldgen;
+package de.erythrocraft.ubreworked.worldgen;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Blocks;
