@@ -1,5 +1,7 @@
 # Ignore Gradle project-specific cache directory
 1.20.1/.gradle
+1.20.1/.eclipse
+1.20.1/.idea
 
 # Ignore Gradle build output directory
 1.20.1/build
@@ -19,6 +21,8 @@
 
 # Ignore Gradle project-specific cache directory
 1.21.1/.gradle
+1.21.1/.eclipse
+1.21.1/.idea
 
 # Ignore Gradle build output directory
 1.21.1/build
@@ -38,6 +42,8 @@
 
 # Ignore Gradle project-specific cache directory
 26.1/.gradle
+26.1/.eclipse
+26.1/.idea
 
 # Ignore Gradle build output directory
 26.1/build
