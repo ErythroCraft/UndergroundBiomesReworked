@@ -7,17 +7,8 @@
 1.20.1/build
 
 # MixinMCP auto-injected rules
-1.20.1/.cursor/rules/minecraft-mod-project.mdc
-1.20.1/.cursor/skills/mixin-writing/SKILL.md
-1.20.1/.cursor/skills/mixin-writing/references/at-reference.md
-1.20.1/.cursor/skills/mixin-writing/references/expressions-language.md
-1.20.1/.cursor/skills/mixinmcp-tools/SKILL.md
-1.20.1/.cursor/skills/mixinmcp-tools/references/toolchains.md
-1.20.1/.claude/skills/mixin-writing/SKILL.md
-1.20.1/.claude/skills/mixin-writing/references/at-reference.md
-1.20.1/.claude/skills/mixin-writing/references/expressions-language.md
-1.20.1/.claude/skills/mixinmcp-tools/SKILL.md
-1.20.1/.claude/skills/mixinmcp-tools/references/toolchains.md
+1.20.1/.cursor
+1.20.1/.claude
 
 # Ignore Gradle project-specific cache directory
 1.21.1/.gradle
@@ -28,17 +19,8 @@
 1.21.1/build
 
 # MixinMCP auto-injected rules
-1.21.1/.cursor/rules/minecraft-mod-project.mdc
-1.21.1/.cursor/skills/mixin-writing/SKILL.md
-1.21.1/.cursor/skills/mixin-writing/references/at-reference.md
-1.21.1/.cursor/skills/mixin-writing/references/expressions-language.md
-1.21.1/.cursor/skills/mixinmcp-tools/SKILL.md
-1.21.1/.cursor/skills/mixinmcp-tools/references/toolchains.md
-1.21.1/.claude/skills/mixin-writing/SKILL.md
-1.21.1/.claude/skills/mixin-writing/references/at-reference.md
-1.21.1/.claude/skills/mixin-writing/references/expressions-language.md
-1.21.1/.claude/skills/mixinmcp-tools/SKILL.md
-1.21.1/.claude/skills/mixinmcp-tools/references/toolchains.md
+1.21.1/.cursor
+1.21.1/.claude
 
 # Ignore Gradle project-specific cache directory
 26.1/.gradle
@@ -49,14 +31,5 @@
 26.1/build
 
 # MixinMCP auto-injected rules
-26.1/.cursor/rules/minecraft-mod-project.mdc
-26.1/.cursor/skills/mixin-writing/SKILL.md
-26.1/.cursor/skills/mixin-writing/references/at-reference.md
-26.1/.cursor/skills/mixin-writing/references/expressions-language.md
-26.1/.cursor/skills/mixinmcp-tools/SKILL.md
-26.1/.cursor/skills/mixinmcp-tools/references/toolchains.md
-26.1/.claude/skills/mixin-writing/SKILL.md
-26.1/.claude/skills/mixin-writing/references/at-reference.md
-26.1/.claude/skills/mixin-writing/references/expressions-language.md
-26.1/.claude/skills/mixinmcp-tools/SKILL.md
-26.1/.claude/skills/mixinmcp-tools/references/toolchains.md
+26.1/.cursor
+26.1/.claude
