@@ -44,52 +44,6 @@ public class UbfBiomeConfig {
     }
 
     /**
-     * Bestimmt das HAUPT-MATERIAL (Primary) basierend auf deiner statischen
-     * Mod-Blockliste!
-     */
-    public static BlockState getPrimaryReplacement(String placeholderType, BlockPos pos) {
-        int y = pos.getY();
-
-        // 1. NETHER WEICHE (Threadsicher ohne Modulo-Grenzfehler bei negativen
-        // Koordinaten)
-        // Verwende Math.abs, da negative Weltkoordinaten sonst ein negatives Ergebnis
-        // bei % liefern!
-        if (y >= 0 && y <= 128 && placeholderType.equals(TYPE_WALL) && Math.abs(pos.getX() + pos.getZ()) % 7 == 0) {
-            return switch (placeholderType) {
-                case TYPE_FLOOR -> Blocks.NETHERRACK.defaultBlockState();
-                case TYPE_CEILING -> Blocks.BASALT.defaultBlockState();
-                case TYPE_WALL -> Blocks.BLACKSTONE.defaultBlockState();
-                default -> Blocks.NETHERRACK.defaultBlockState();
-            };
-        }
-
-        int biomeId = getUndergroundBiomeId(pos);
-
-        // Sicherheitsprüfung, um IndexOutOfBoundsException in der getStoneList() zu
-        // blockieren
-        if (UbModBlocks.getStoneList().size() < 21) {
-            return Blocks.STONE.defaultBlockState();
-        }
-
-        // Indizes deiner Liste: 0-7 Magmatisch, 8-15 Metamorph, 16-23 Sediment
-        return switch (biomeId) {
-            case 0 -> switch (placeholderType) {
-                case TYPE_WALL -> UbModBlocks.getStoneList().get(16).get().defaultBlockState();
-                case TYPE_FLOOR -> Blocks.MOSS_BLOCK.defaultBlockState();
-                default -> Blocks.DRIPSTONE_BLOCK.defaultBlockState();
-            };
-            case 1 -> switch (placeholderType) {
-                case TYPE_WALL -> UbModBlocks.getStoneList().get(10).get().defaultBlockState();
-                default -> Blocks.STONE.defaultBlockState();
-            };
-            default -> switch (placeholderType) {
-                case TYPE_WALL -> UbModBlocks.getStoneList().get(0).get().defaultBlockState();
-                default -> Blocks.STONE.defaultBlockState();
-            };
-        };
-    }
-
-    /**
      * Bestimmt das SEKUNDÄR-MATERIAL (Blending) mit feinen Mischungen deiner
      * UBF-Steine!
      */

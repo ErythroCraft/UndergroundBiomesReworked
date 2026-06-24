@@ -15,7 +15,6 @@ public class UbModConfig {
         public static final ForgeConfigSpec.DoubleValue BIOME_SIZE;
         public static final ForgeConfigSpec.DoubleValue ORE_CHANCE_UPPER;
         public static final ForgeConfigSpec.DoubleValue ORE_CHANCE_DEEP;
-        public static final ForgeConfigSpec.DoubleValue ORE_CHANCE_NETHER;
 
         static {
                 BUILDER.comment("Underground Biomes Forged Configuration").push("general");
@@ -42,9 +41,6 @@ public class UbModConfig {
                 ORE_CHANCE_DEEP = BUILDER
                                 .comment("Multiplier for deepslate ores. 1.0 is default.")
                                 .defineInRange("deepOreMultiplier", 1.0, 0.0, 10.0);
-                ORE_CHANCE_NETHER = BUILDER
-                                .comment("Multiplier for nether ores. 1.0 is default.")
-                                .defineInRange("netherOreMultiplier", 1.0, 0.0, 10.0);
                 BUILDER.pop();
 
                 // KORREKTUR: Nur noch EIN pop(), um die "general"-Kategorie sauber zu
