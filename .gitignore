@@ -1,11 +1,16 @@
+# Ignore Gradle main-project
+.vscode
+
 # Ignore Gradle project-specific cache directory
 1.20.1/.gradle
 1.20.1/.eclipse
 1.20.1/.idea
+1.20.1/.vscode
 
 # Ignore Gradle build output directory
 1.20.1/build
 1.20.1/app
+1.20.1/bin
 1.20.1/plugin
 1.20.1/run
 
@@ -17,10 +22,12 @@
 1.21.1/.gradle
 1.21.1/.eclipse
 1.21.1/.idea
+1.21.1/.vscode
 
 # Ignore Gradle build output directory
 1.21.1/build
 1.21.1/app
+1.21.1/bin
 1.21.1/plugin
 1.21.1/run
 
@@ -32,10 +39,12 @@
 26.1/.gradle
 26.1/.eclipse
 26.1/.idea
+26.1/.vscode
 
 # Ignore Gradle build output directory
 26.1/build
 26.1/app
+26.1/bin
 26.1/plugin
 26.1/run
 
