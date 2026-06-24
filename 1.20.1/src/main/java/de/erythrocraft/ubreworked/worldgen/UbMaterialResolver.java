@@ -4,11 +4,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import de.erythrocraft.ubreworked.init.UndergroundBiomesReworkedModBlocks;
+import de.erythrocraft.ubreworked.init.UbModBlocks;
 
-public class UndergroundBiomesForgedMaterialResolver {
+public class UbMaterialResolver {
 
-    private UndergroundBiomesForgedMaterialResolver() {
+    private UbMaterialResolver() {
         throw new UnsupportedOperationException("Dies ist eine Utility-Klasse und darf nicht instanziiert werden.");
     }
 
@@ -16,9 +16,9 @@ public class UndergroundBiomesForgedMaterialResolver {
             double blendNoise) {
         Block currentBlock = currentState.getBlock();
 
-        Block ubfFloor = UndergroundBiomesReworkedModBlocks.UBF_FLOOR.get();
-        Block ubfWall = UndergroundBiomesReworkedModBlocks.UBF_WALL.get();
-        Block ubfCeiling = UndergroundBiomesReworkedModBlocks.UBF_CEILING.get();
+        Block ubfFloor = UbModBlocks.UBF_FLOOR.get();
+        Block ubfWall = UbModBlocks.UBF_WALL.get();
+        Block ubfCeiling = UbModBlocks.UBF_CEILING.get();
 
         if (currentBlock != ubfFloor && currentBlock != ubfWall && currentBlock != ubfCeiling) {
             return currentState;

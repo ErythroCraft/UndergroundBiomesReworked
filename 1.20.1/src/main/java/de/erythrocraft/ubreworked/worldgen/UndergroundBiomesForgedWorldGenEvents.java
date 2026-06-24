@@ -25,8 +25,8 @@ public class UndergroundBiomesForgedWorldGenEvents {
 
             if (chunk != null && chunk.getStatus().isOrAfter(ChunkStatus.FULL) && event.isNewChunk()) {
 
-                UndergroundBiomesForgedCarver.carveTunnelChunk(chunk);
-                UndergroundBiomesForgedOreInjector.resolveAndInjectChunk(chunk);
+                UbCarver.carveTunnelChunk(chunk);
+                UbOreInjector.resolveAndInjectChunk(chunk);
             }
         }
     }

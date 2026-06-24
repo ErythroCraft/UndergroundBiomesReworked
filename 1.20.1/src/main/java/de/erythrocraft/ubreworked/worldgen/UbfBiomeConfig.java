@@ -32,7 +32,7 @@ public class UbfBiomeConfig {
         double noiseZ = pos.getZ() / size;
 
         // Nutzt Y=0 als feste Schicht für die Biom-Verteilung
-        double biomeNoise = UndergroundBiomesForgedNoiseGenerator.sampleTunnelDensity((int) Math.floor(noiseX * 100), 0,
+        double biomeNoise = UbNoiseGenerator.sampleTunnelDensity((int) Math.floor(noiseX * 100), 0,
                 (int) Math.floor(noiseZ * 100));
 
         if (biomeNoise < -0.3)
@@ -165,7 +165,7 @@ public class UbfBiomeConfig {
         };
     }
 
-    public static double getBlendThreshold() {
-        return 1.00; //Noncompliant
+    public static double getBlendThreshold(String placeholderType) {
+        return 1.00;
     }
 }

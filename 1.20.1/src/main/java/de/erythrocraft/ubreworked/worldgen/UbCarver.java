@@ -6,11 +6,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 
 @SuppressWarnings("null")
-public class UndergroundBiomesForgedCarver {
+public class UbCarver {
 
     private static final double CARVE_THRESHOLD = 0.72;
 
-    private UndergroundBiomesForgedCarver() {
+    private UbCarver() {
         throw new UnsupportedOperationException("Dies ist eine Utility-Klasse.");
     }
 
@@ -32,7 +32,7 @@ public class UndergroundBiomesForgedCarver {
                 int worldZ = minZ + z;
 
                 for (int worldY = minY; worldY <= maxY; worldY++) {
-                    double centerDensity = UndergroundBiomesForgedNoiseGenerator.sampleTunnelDensity(worldX, worldY,
+                    double centerDensity = UbNoiseGenerator.sampleTunnelDensity(worldX, worldY,
                             worldZ);
 
                     if (centerDensity > CARVE_THRESHOLD) {
@@ -55,7 +55,7 @@ public class UndergroundBiomesForgedCarver {
                     // Wenn der aktuelle Block KEINE Luft ist, schauen wir, ob er an ein
                     // Höhlen-Aushub grenzt
                     if (!chunk.getBlockState(pos).isAir()) {
-                        double centerDensity = UndergroundBiomesForgedNoiseGenerator.sampleTunnelDensity(worldX, worldY,
+                        double centerDensity = UbNoiseGenerator.sampleTunnelDensity(worldX, worldY,
                                 worldZ);
 
                         // Liegt im Schwellenwert-Bereich für die Wand-Dekoration
@@ -79,30 +79,30 @@ public class UndergroundBiomesForgedCarver {
         // Wir holen uns die Dichten. Wenn wir am Chunk-Rand sind, spiegeln wir den
         // eigenen Wert,
         // um den Generator nicht in fremde Chunks springen zu lassen.
-        double currentDensity = UndergroundBiomesForgedNoiseGenerator.sampleTunnelDensity(worldX, worldY, worldZ);
+        double currentDensity = UbNoiseGenerator.sampleTunnelDensity(worldX, worldY, worldZ);
 
         double densityNorth = (worldZ - 1 >= minZ)
-                ? UndergroundBiomesForgedNoiseGenerator.sampleTunnelDensity(worldX, worldY, worldZ - 1)
+                ? UbNoiseGenerator.sampleTunnelDensity(worldX, worldY, worldZ - 1)
                 : currentDensity;
         double densitySouth = (worldZ + 1 < minZ + 16)
-                ? UndergroundBiomesForgedNoiseGenerator.sampleTunnelDensity(worldX, worldY, worldZ + 1)
+                ? UbNoiseGenerator.sampleTunnelDensity(worldX, worldY, worldZ + 1)
                 : currentDensity;
         double densityWest = (worldX - 1 >= minX)
-                ? UndergroundBiomesForgedNoiseGenerator.sampleTunnelDensity(worldX - 1, worldY, worldZ)
+                ? UbNoiseGenerator.sampleTunnelDensity(worldX - 1, worldY, worldZ)
                 : currentDensity;
         double densityEast = (worldX + 1 < minX + 16)
-                ? UndergroundBiomesForgedNoiseGenerator.sampleTunnelDensity(worldX + 1, worldY, worldZ)
+                ? UbNoiseGenerator.sampleTunnelDensity(worldX + 1, worldY, worldZ)
                 : currentDensity;
 
         // Vertikale Achsen sind innerhalb des Chunks immer sicher
         double densityUp = (worldY + 1 <= maxY)
-                ? UndergroundBiomesForgedNoiseGenerator.sampleTunnelDensity(worldX, worldY + 1, worldZ)
+                ? UbNoiseGenerator.sampleTunnelDensity(worldX, worldY + 1, worldZ)
                 : currentDensity;
         double densityDown = (worldY - 1 >= minY)
-                ? UndergroundBiomesForgedNoiseGenerator.sampleTunnelDensity(worldX, worldY - 1, worldZ)
+                ? UbNoiseGenerator.sampleTunnelDensity(worldX, worldY - 1, worldZ)
                 : currentDensity;
 
-        BlockState surfaceBlock = UndergroundBiomesForgedSurfaceClassifier.calculateSurfaceBlock(
+        BlockState surfaceBlock = UbSurfaceClassifier.calculateSurfaceBlock(
                 densityNorth, densitySouth,
                 densityUp, densityDown,
                 densityWest, densityEast);

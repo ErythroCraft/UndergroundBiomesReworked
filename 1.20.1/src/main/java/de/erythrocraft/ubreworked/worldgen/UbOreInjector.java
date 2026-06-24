@@ -11,9 +11,9 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 
 @SuppressWarnings("null")
-public class UndergroundBiomesForgedOreInjector {
+public class UbOreInjector {
 
-    private UndergroundBiomesForgedOreInjector() {
+    private UbOreInjector() {
         throw new UnsupportedOperationException("Dies ist eine Utility-Klasse.");
     }
 
@@ -78,12 +78,12 @@ public class UndergroundBiomesForgedOreInjector {
                             }
 
                             if (finalState == null) {
-                                double blendNoise = UndergroundBiomesForgedNoiseGenerator.sampleTunnelDensity(
+                                double blendNoise = UbNoiseGenerator.sampleTunnelDensity(
                                         (int) (worldX * 2.5),
                                         (int) (worldY * 3.0),
                                         (int) (worldZ * 2.5));
                                 BlockPos pos = new BlockPos(worldX, worldY, worldZ);
-                                finalState = UndergroundBiomesForgedMaterialResolver
+                                finalState = UbMaterialResolver
                                         .resolvePlaceholder(chunk, currentState, pos, blendNoise);
                             }
 

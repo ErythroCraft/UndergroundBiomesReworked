@@ -1,7 +1,7 @@
 package de.erythrocraft.ubreworked.init;
 
 import de.erythrocraft.ubreworked.UndergroundBiomesReworkedMod;
-import de.erythrocraft.ubreworked.worldgen.NeanderthalCavePiece;
+import de.erythrocraft.ubreworked.worldgen.UbNeanderthalCavePiece;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -17,5 +17,5 @@ public class UbModStructurePieces {
 
         // Registriert das eigentliche Stück Java-Code
         public static final RegistryObject<StructurePieceType> NEANDERTHAL_CAVE = REGISTRY.register("neanderthal_cave",
-                        () -> NeanderthalCavePiece::new);
+                        () -> UbNeanderthalCavePiece::new);
 }

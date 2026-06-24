@@ -15,19 +15,19 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 
-public class NeanderthalCavePiece extends StructurePiece {
+public class UbNeanderthalCavePiece extends StructurePiece {
 
     // Der Konstruktor bleibt starr auf 5 fixiert – Das sichert das Laden/Speichern
     // der Regionen ab!
     // BoundingBox reicht lokal von 0 bis 10 in alle Achsen (Zentrum ist 5)
-    public NeanderthalCavePiece(@javax.annotation.Nonnull BlockPos wallPos) {
+    public UbNeanderthalCavePiece(@javax.annotation.Nonnull BlockPos wallPos) {
         super(UbModStructurePieces.NEANDERTHAL_CAVE.get(), 0,
                 new BoundingBox(
                         wallPos.getX() - 5, wallPos.getY() - 5, wallPos.getZ() - 5,
                         wallPos.getX() + 5, wallPos.getY() + 5, wallPos.getZ() + 5));
     }
 
-    public NeanderthalCavePiece(
+    public UbNeanderthalCavePiece(
             @javax.annotation.Nonnull StructurePieceSerializationContext context,
             @javax.annotation.Nonnull CompoundTag tag) {
         super(UbModStructurePieces.NEANDERTHAL_CAVE.get(), tag);

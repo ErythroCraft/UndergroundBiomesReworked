@@ -1,8 +1,8 @@
 package de.erythrocraft.ubreworked.worldgen;
 
-public class UndergroundBiomesForgedNoiseGenerator {
+public class UbNoiseGenerator {
 
-    private UndergroundBiomesForgedNoiseGenerator() {
+    private UbNoiseGenerator() {
         throw new UnsupportedOperationException("Dies ist eine Utility-Klasse.");
     }
 

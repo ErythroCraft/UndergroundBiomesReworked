@@ -4,14 +4,14 @@ import de.erythrocraft.ubreworked.UndergroundBiomesReworkedMod;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class UndergroundBiomesForgedSurfaceClassifier {
+public class UbSurfaceClassifier {
 
     /**
      * Behebt den SonarQube-Fehler java:S1118.
      * Ein privater Konstruktor verhindert, dass diese Utility-Klasse instanziiert
      * wird.
      */
-    private UndergroundBiomesForgedSurfaceClassifier() {
+    private UbSurfaceClassifier() {
         throw new UnsupportedOperationException("Dies ist eine Utility-Klasse und darf nicht instanziiert werden.");
     }
 
