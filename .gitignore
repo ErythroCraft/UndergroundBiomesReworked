@@ -1,18 +1,56 @@
 # Ignore Gradle project-specific cache directory
-.gradle
+1.20.1/.gradle
 
 # Ignore Gradle build output directory
-build
+1.20.1/build
 
 # MixinMCP auto-injected rules
-.cursor/rules/minecraft-mod-project.mdc
-.cursor/skills/mixin-writing/SKILL.md
-.cursor/skills/mixin-writing/references/at-reference.md
-.cursor/skills/mixin-writing/references/expressions-language.md
-.cursor/skills/mixinmcp-tools/SKILL.md
-.cursor/skills/mixinmcp-tools/references/toolchains.md
-.claude/skills/mixin-writing/SKILL.md
-.claude/skills/mixin-writing/references/at-reference.md
-.claude/skills/mixin-writing/references/expressions-language.md
-.claude/skills/mixinmcp-tools/SKILL.md
-.claude/skills/mixinmcp-tools/references/toolchains.md
+1.20.1/.cursor/rules/minecraft-mod-project.mdc
+1.20.1/.cursor/skills/mixin-writing/SKILL.md
+1.20.1/.cursor/skills/mixin-writing/references/at-reference.md
+1.20.1/.cursor/skills/mixin-writing/references/expressions-language.md
+1.20.1/.cursor/skills/mixinmcp-tools/SKILL.md
+1.20.1/.cursor/skills/mixinmcp-tools/references/toolchains.md
+1.20.1/.claude/skills/mixin-writing/SKILL.md
+1.20.1/.claude/skills/mixin-writing/references/at-reference.md
+1.20.1/.claude/skills/mixin-writing/references/expressions-language.md
+1.20.1/.claude/skills/mixinmcp-tools/SKILL.md
+1.20.1/.claude/skills/mixinmcp-tools/references/toolchains.md
+
+# Ignore Gradle project-specific cache directory
+1.21.1/.gradle
+
+# Ignore Gradle build output directory
+1.21.1/build
+
+# MixinMCP auto-injected rules
+1.21.1/.cursor/rules/minecraft-mod-project.mdc
+1.21.1/.cursor/skills/mixin-writing/SKILL.md
+1.21.1/.cursor/skills/mixin-writing/references/at-reference.md
+1.21.1/.cursor/skills/mixin-writing/references/expressions-language.md
+1.21.1/.cursor/skills/mixinmcp-tools/SKILL.md
+1.21.1/.cursor/skills/mixinmcp-tools/references/toolchains.md
+1.21.1/.claude/skills/mixin-writing/SKILL.md
+1.21.1/.claude/skills/mixin-writing/references/at-reference.md
+1.21.1/.claude/skills/mixin-writing/references/expressions-language.md
+1.21.1/.claude/skills/mixinmcp-tools/SKILL.md
+1.21.1/.claude/skills/mixinmcp-tools/references/toolchains.md
+
+# Ignore Gradle project-specific cache directory
+26.1/.gradle
+
+# Ignore Gradle build output directory
+26.1/build
+
+# MixinMCP auto-injected rules
+26.1/.cursor/rules/minecraft-mod-project.mdc
+26.1/.cursor/skills/mixin-writing/SKILL.md
+26.1/.cursor/skills/mixin-writing/references/at-reference.md
+26.1/.cursor/skills/mixin-writing/references/expressions-language.md
+26.1/.cursor/skills/mixinmcp-tools/SKILL.md
+26.1/.cursor/skills/mixinmcp-tools/references/toolchains.md
+26.1/.claude/skills/mixin-writing/SKILL.md
+26.1/.claude/skills/mixin-writing/references/at-reference.md
+26.1/.claude/skills/mixin-writing/references/expressions-language.md
+26.1/.claude/skills/mixinmcp-tools/SKILL.md
+26.1/.claude/skills/mixinmcp-tools/references/toolchains.md
