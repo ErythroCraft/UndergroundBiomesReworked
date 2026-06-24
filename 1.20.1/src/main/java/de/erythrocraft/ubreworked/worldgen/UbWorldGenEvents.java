@@ -10,9 +10,9 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = UndergroundBiomesReworkedMod.MODID)
 @SuppressWarnings("null")
-public class UndergroundBiomesForgedWorldGenEvents {
+public class UbWorldGenEvents {
 
-    private UndergroundBiomesForgedWorldGenEvents() {
+    private UbWorldGenEvents() {
         throw new UnsupportedOperationException("Dies ist eine Utility-Klasse und darf nicht instanziiert werden.");
     }
 
